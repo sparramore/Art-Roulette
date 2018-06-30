@@ -20,6 +20,56 @@
 
     <h1 id="noun2"></h1>
     
+
+    <!-- Modal -->
+    <div id="userLoginModal" class="modal show" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 id="user-Login-Modal-Title">Please enter your e-mail and password</h4>
+                </div>
+                <div class="modal-body">
+                    <row>
+                        <div class="col-lg-12">
+                            <p id="userNameTextPrompt">User Name</p>
+                            <input id="e-mail-Sub" type="text" autocomplete="off">
+                        </div>
+                        <div class="col-lg-12">
+                            <p id="userNameTextPrompt">Password</p>
+                            <input id="pass-Sub" type="text" autocomplete="off">
+                        </div>
+                        
+                    </row>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="user-Login-Modal-Submit" data-dismiss="modal">Submit</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="userLoginErrorModal" class="modal show" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 id="user-Error-Modal-Title"></h4>
+                </div>
+                <div class="modal-body">
+                    <h5 id="user-Error-Modal-Body"></h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="user-Error-Modal-Submit" data-dismiss="modal">Okay</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
 </body>
 
 <script src="assets/javascript/game.js"></script>

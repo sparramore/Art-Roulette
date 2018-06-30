@@ -1,1 +1,29 @@
-{\rtf1}
+
+
+/* adding a little styling for the modal dialogs - we can change the accenting colors whenever */
+
+.modal-header
+{
+    background: darkblue;
+    color: white;
+}
+
+.modal-body
+{
+    padding-left: 20px;
+    padding-right: 5px;
+    background: grey;
+}
+
+.modal-footer
+{
+    background: darkblue;
+}
+
+#userNameTextPrompt
+{
+    width: auto;
+    margin: 0;
+    border: 0;
+    display:inline-block;
+}
