@@ -114,6 +114,12 @@ if(userEmail === "" || userPass === "")
     $("#userLoginErrorModal").show();
 }
 
-UserLogin(userEmail,userPass);
-});
 
+// CHECK FOR INCOMPATIBLE LISTENERS!!!
+UserLogin(userEmail,userPass);
+// Materialize JavaScript components
+$(document).ready(function() {
+  // Navbar dropdown control - Materialize
+  $(".dropdown-trigger").dropdown();
+});
+});
