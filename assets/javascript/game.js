@@ -10,6 +10,7 @@ var config = {
 
 firebase.initializeApp(config);
 var database = firebase.database();
+var auth = firebase.auth();
 var adj = '';
 var noun = '';
 
@@ -76,19 +77,76 @@ database.ref().on("value", function (snapshot) {
     console.log("The read failed: " + errorObject.code);
 });
 
-function UserLogin(userEmail,userPass)
+function submitEmailForAuth(userEmail,userPass,saveLoginChecked)
 {
+    auth.createUserWithEmailAndPassword(userEmail, userPass).catch(function(error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        console.log(error);
+        console.log(error.message);
+        // ...
+      });
 
+      window.localStorage.setItem("art-Roulette-Email",userEmail);
+      window.localStorage.setItem("art-Roulette-Pass",userPass);
+      window.localStorage.setItem("art-Roulette-SaveLogin",saveLoginChecked);
+      window.localStorage.setItem("art-Roulette-Submitted-Email",true)
+
+      if(saveLoginChecked)
+      {
+          LoginToServer();
+      }
 }
 
+function LoginToServer()
+{
+    console.log("logging in!");
+    auth.signInWithEmailAndPassword(localStorage.getItem("art-Roulette-Submitted-Email"), localStorage.getItem("art-Roulette-Pass")).catch(function(error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // ...
+      });
+}
 
-$(window).on('load', function(){ 
-    $("#userLoginModal").show();
+$("#loginButton").on("click",function()
+{
+    LoginToServer();
+});
+
+$(window).on('load', function()
+{ 
+    console.log("login: " + localStorage.getItem("art-Roulette-Submitted-Email"));
+    console.log("automatic login: " + localStorage.getItem("art-Roulette-SaveLogin"));
+    if(!localStorage.getItem("art-Roulette-Submitted-Email"))
+    {
+        $("#userLoginModal").show();
+    }
+
+    if(localStorage.getItem("art-Roulette-SaveLogin"))
+    {
+        $("#user-Login-Modal-Submit").hide();
+        LoginToServer();
+    }
+
+});
+
+auth.signOut().then(function() {
+    // Sign-out successful.
+  }).catch(function(error) {
+    // An error happened.
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    console.log(error);
+    console.log(error.message);
   });
 
-  $("#user-Error-Modal-Submit").on("click",function()
+$("#user-Error-Modal-Submit").on("click",function()
 {
     $("#userLoginErrorModal").hide();
+    $("#userLoginModal").show();
+
 });
 
 //our modal dialog's submit button clicked
@@ -98,9 +156,12 @@ $("#user-Login-Modal-Submit").on("click",function()
 //get the users email and password.
 var userEmail = $("#e-mail-Sub").val();
 var userPass = $("#pass-Sub").val();
+var saveLoginChecked = false;
+saveLoginChecked = $('input[type=checkbox]').prop("checked");
 
 console.log("userEmail: " + userEmail);
 console.log("userPass: " + userPass);
+console.log("login checked: " + saveLoginChecked);
 
 //we are going to hide our login modal just because if we are having issues we are going to need to display another modal.
 $("#userLoginModal").hide();
@@ -112,8 +173,15 @@ if(userEmail === "" || userPass === "")
     $("#user-Error-Modal-Title").text("User Error");
     $("#user-Error-Modal-Body").text("please provide both a User Name and a Password");
     $("#userLoginErrorModal").show();
+    return;
 }
 
-UserLogin(userEmail,userPass);
+auth.signOut().then(function() {
+    // Sign-out successful.
+  }).catch(function(error) {
+    // An error happened.
+  });
+
+submitEmailForAuth(userEmail,userPass,saveLoginChecked);
 });
 
