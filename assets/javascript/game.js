@@ -116,20 +116,19 @@ $("#user-Login-Modal-Submit").on("click",function() {
 });
 
 
+
 // Materialize JavaScript components
 
-
-
 $(document).ready(function() {
-  // Navbar dropdown control - Materialize
-  // $(".dropdown-trigger").dropdown();
-  // $(".fixed-action-btn").floatingActionButton();
+  // Materialize elements initialization
   $(".fixed-action-btn").floatingActionButton({
     direction: "right"
   });
   $('.collapsible').collapsible();
   $('.modal').modal();
   $('.trigger-modal').modal();
+
+  // Listener for "word generator" button.
   $("#navbarButton").on("click", function() {
     getAdj();
     getNoun1();
