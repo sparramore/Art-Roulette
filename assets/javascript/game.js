@@ -23,7 +23,7 @@ function getAdj() {
         var nounName = 'noun' + randomNoun;
         noun = snapshot.child(nounName).val().name;
         $('#noun1').text(noun);
-        showRandomImage(noun, '#noun1');
+        showRandomImage(noun, '#rand-image-noun1');
         // console.log("There are " + snapshot.numChildren() + " nouns");
         // console.log(randomNoun);
         // console.log(snapshot.child(nounName).val().name);
@@ -40,7 +40,7 @@ function getAdj() {
 
         noun = snapshot.child(nounName).val().name;
         $('#noun2').text(noun);
-        showRandomImage(noun, '#noun2');
+        showRandomImage(noun, '#rand-image-noun2');
             //get a random word from the Datamuse array
             var randomDataMuse = Math.floor(Math.random() * response.length);
 
@@ -99,7 +99,7 @@ function getNoun2() {
 
         adj = snapshot.child(adjName).val().name;
         $('#adjective').text(adj);
-        showRandomImage(adj, "#adjective");
+        showRandomImage(adj, "#rand-image-adj");
     })
     // $('#adjective').text(adj);
 
@@ -253,15 +253,16 @@ function showRandomImage (searchWord, divID) {
     }).then(function(response) {
         console.log(response);
         var results = response.items;
+        var imageDiv = $("<div>");
         for (var i = 0; i < 3; i++) {
             var randomImage = $("<img>");
             var sourceArr = results[i].pagemap.cse_image;
             var sourceUrl = sourceArr[0].src;
             randomImage.attr("src", sourceUrl);
-            randomImage.attr('width', 200).attr('height', 200)
-            $(divID).parent("div").append(randomImage); 
+            randomImage.attr('width', 200).attr('height', 200);
+            $(imageDiv).append(randomImage);
         }
-        $(divID).parent("div").append("<br>");
+        $(divID).html(imageDiv); 
     });
      
 }
