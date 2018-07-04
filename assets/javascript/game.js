@@ -127,6 +127,7 @@ $(document).ready(function() {
   $('.collapsible').collapsible();
   $('.modal').modal();
   $('.trigger-modal').modal();
+  $('.tooltipped').tooltip();
 
   // Listener for "word generator" button.
   $("#navbarButton").on("click", function() {
