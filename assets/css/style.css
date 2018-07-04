@@ -27,3 +27,77 @@
     border: 0;
     display:inline-block;
 }
+
+/* Materialize CSS below */
+
+/* Navbar FAB button positioning */
+.fixed-action-btn {
+  top: 1%;
+  left: 8%;
+  width: 75px;
+  height: 75px;
+}
+
+/* Navbar button placement. */
+
+
+#navbarLogo {
+  font-size: 24px;
+}
+
+.word-result {
+  text-align: center;
+}
+
+#profilePicture {
+  width: 80px;
+  /* height: 40px; */
+  max-height: 100px!important;
+  padding: 15px 0!important;
+  left: 50%;
+}
+
+.circle {
+  display: block;
+  width: 150px !important;
+  height: 150px !important;
+  margin: 1em auto;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  -webkit-border-radius: 99em;
+  -moz-border-radius: 99em;
+  border-radius: 99em;
+  border: 5px solid #C33E38;
+  box-shadow: 0 3px 2px rgba(0, 0, 0, 0.3);
+  transition: 1s;
+}
+
+#bottomRouletteImage {
+  background-image: url('../images/roulette_bottom.gif');
+  background-size: cover;
+}
+
+@media only screen and (max-width: 678px) {
+  .word-result {
+    display: inline-block;
+    width: 100%;
+
+  }
+
+  .circle {
+    display: block;
+    width: 75px !important;
+    height: 75px !important;
+    margin: 1em auto;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    -webkit-border-radius: 99em;
+    -moz-border-radius: 99em;
+    border-radius: 99em;
+    border: 5px solid #C33E38;
+    box-shadow: 0 3px 2px rgba(0, 0, 0, 0.3); 
+    transition: 1s; 
+  }
+}

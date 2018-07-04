@@ -109,10 +109,11 @@ function getNoun2() {
     })
 }
 
-//call word functions
-getAdj();
-getNoun1();
-getNoun2();
+
+// getAdj();
+// getNoun1();
+// getNoun2();
+
 
 //console.log our nouns and adjectives database lists for error checking
 database.ref().on("value", function (snapshot) {
@@ -125,39 +126,74 @@ database.ref().on("value", function (snapshot) {
     console.log("The read failed: " + errorObject.code);
 });
 
-function UserLogin(userEmail, userPass) {
+function UserLogin(userEmail,userPass) {
+
 
 }
 
 
-$(window).on('load', function () {
-    $("#userLoginModal").show();
-});
+$(window).on('load', function(){ 
+    //$("#userLoginModal").show();
+  });
 
-$("#user-Error-Modal-Submit").on("click", function () {
-    $("#userLoginErrorModal").hide();
+  $("#user-Error-Modal-Submit").on("click",function() {
+  $("#userLoginErrorModal").hide();
 });
 
 //our modal dialog's submit button clicked
-$("#user-Login-Modal-Submit").on("click", function () {
+$("#user-Login-Modal-Submit").on("click",function() {
 
-    //get the users email and password.
-    var userEmail = $("#e-mail-Sub").val();
-    var userPass = $("#pass-Sub").val();
+  //get the users email and password.
+  var userEmail = $("#e-mail-Sub").val();
+  var userPass = $("#pass-Sub").val();
 
-    console.log("userEmail: " + userEmail);
-    console.log("userPass: " + userPass);
+  console.log("userEmail: " + userEmail);
+  console.log("userPass: " + userPass);
 
-    //we are going to hide our login modal just because if we are having issues we are going to need to display another modal.
-    $("#userLoginModal").hide();
+  //we are going to hide our login modal just because if we are having issues we are going to need to display another modal.
+  $("#userLoginModal").hide();
 
-    //if they failed to enter text for the email or password throw up an error modal
-    if (userEmail === "" || userPass === "") {
-        //fill the error title and text
-        $("#user-Error-Modal-Title").text("User Error");
-        $("#user-Error-Modal-Body").text("please provide both a User Name and a Password");
-        $("#userLoginErrorModal").show();
+  //if they failed to enter text for the email or password throw up an error modal
+  if(userEmail === "" || userPass === "") {
+    //fill the error title and text
+    $("#user-Error-Modal-Title").text("User Error");
+    $("#user-Error-Modal-Body").text("please provide both a User Name and a Password");
+    $("#userLoginErrorModal").show();
+  }
+
+
+  // CHECK FOR INCOMPATIBLE LISTENERS!!!
+  UserLogin(userEmail,userPass);
+});
+
+
+
+// Materialize JavaScript components
+
+$(document).ready(function() {
+  // Materialize elements initialization
+  $(".fixed-action-btn").floatingActionButton({
+    direction: "right"
+  });
+  $('.collapsible').collapsible();
+  $('.modal').modal();
+  $('.trigger-modal').modal();
+  $('.tooltipped').tooltip();
+
+  // Listener for "word generator" button.
+  $("#navbarButton").on("click", function() {
+    getAdj();
+    getNoun1();
+    getNoun2();
+  });
+
+  // Listener for checkbox on "Settings" modal, shows/hides the user profile bar.
+  $("input:checkbox").change(function() {
+    if($(this).is(":checked")) {
+      $("#userProfileNavbar").removeClass("hide");
     }
-
-    UserLogin(userEmail, userPass);
+    else {
+      $("#userProfileNavbar").addClass("hide");
+    }
+  });
 });
