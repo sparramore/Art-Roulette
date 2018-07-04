@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -16,6 +17,7 @@
   
   <script src="https://www.gstatic.com/firebasejs/5.1.0/firebase.js"></script>
   <title>Art-Roulette</title>
+  
 </head>
 <body>
 
@@ -40,6 +42,7 @@
     </nav>
   </div>
 
+
   <!-- Login modal -->
   <div id="userLoginModal" class="modal" role="dialog">
     <div class="modal-dialog">
@@ -57,6 +60,12 @@
             <div class="col-lg-12">
               <p id="userNameTextPrompt">Password</p>
               <input id="pass-Sub" type="text" autocomplete="off">
+            </div>
+            <div class="input-group">
+              <div class="input-group-prepend">
+              <input type="checkbox" aria-label="Checkbox for following text input">  
+              </div>
+              <span class="input-group-text" id="automaticLogin">Log in Automatically?</span>
             </div>
           </row>
         </div>
@@ -100,7 +109,10 @@
     </div>
   </nav>
 
-  <br><br>
+<div type="button" class="btn btn-primary" id="loginButton">submit</div>
+<script type="text/javascript" src="js/materialize.min.js"></script>
+</body>
+
 
   <!-- Button to generate words -->
   <div class="row">
