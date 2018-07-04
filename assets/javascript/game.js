@@ -25,6 +25,7 @@ function getNoun1() {
 
         noun = snapshot.child(nounName).val().name;
         $('#noun1').text(noun);
+        showRandomImage(noun);
 
     })
 
@@ -41,6 +42,7 @@ function getNoun2() {
 
         noun = snapshot.child(nounName).val().name;
         $('#noun2').text(noun);
+        showRandomImage(noun);
 
     })
 
@@ -58,6 +60,7 @@ function getAdj() {
 
         adj = snapshot.child(adjName).val().name;
         $('#adjective').text(adj);
+        showRandomImage(adj);
     })
 
 }
@@ -116,4 +119,29 @@ if(userEmail === "" || userPass === "")
 
 UserLogin(userEmail,userPass);
 });
+
+
+
+function showRandomImage (searchWord) {
+    var queryURL = "https://www.googleapis.com/customsearch/v1?q=" + searchWord + "&cx=008015619189080859829%3Agapxkuki8im&key=AIzaSyC0OrvTZD_SB6qRfqRPu7L_F2ugZTzA8pE";
+
+    $.ajax({
+        url: queryURL,
+        method: "GET",
+        dataType: 'jsonp'
+    }).then(function(response) {
+        console.log(response);
+        var results = response.items;
+        for (var i = 0; i < 3; i++) {
+            var randomImage = $("<img>");
+            var sourceArr = results[i].pagemap.cse_image;
+            var sourceUrl = sourceArr[0].src;
+            randomImage.attr("src", sourceUrl);
+            randomImage.attr('width', 200).attr('height', 200)
+            $("#google-images").append(randomImage); 
+        }
+        $("#google-images").append("<br>")
+    });
+     
+}
 
