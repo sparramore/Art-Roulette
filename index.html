@@ -70,16 +70,24 @@
   <!-- Settings modal - Not sure if needed. -->
   <div id="settingsModal" class="modal">
     <div class="modal-content">
-      <h4>Modal Header</h4>
-      <p>A bunch of text</p>
+      <h4>Possible "Settings" Modal</h4>
+      <p>Show user profile bar.</p>
+      <div id="userProfileShowToggle" class="switch">
+        <label>
+          Off
+          <input type="checkbox">
+          <span class="lever"></span>
+          On
+        </label>
+      </div>
     </div>
     <div class="modal-footer">
-      <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+      <a href="#!" class="modal-close waves-effect waves-green btn-flat">DONE</a>
     </div>
   </div>
 
   <!-- Second navbar -->
-  <nav>
+  <nav id="userProfileNavbar" class="hide">
     <div class="nav-wrapper">
       <div class="row">
         <div class="col s12 center-align">
@@ -116,7 +124,7 @@
     <div class="col s12 m6">
       <ul class="collapsible popout">
         <li>
-          <div class="collapsible-header"><h5>Section Header</h5></div>
+          <div class="collapsible-header"><h5>Section Header - Click me.</h5></div>
           <div class="collapsible-body"><h6>Words with links or something.</h6></div>
           <a class="collapsible-body" href="https://google.com">Google</a>
         </li>

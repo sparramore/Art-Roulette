@@ -135,5 +135,13 @@ $(document).ready(function() {
     getNoun2();
   });
 
-
+  // Listener for checkbox on "Settings" modal, shows/hides the user profile bar.
+  $("input:checkbox").change(function() {
+    if($(this).is(":checked")) {
+      $("#userProfileNavbar").removeClass("hide");
+    }
+    else {
+      $("#userProfileNavbar").addClass("hide");
+    }
+  });
 });
