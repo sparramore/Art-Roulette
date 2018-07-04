@@ -22,6 +22,8 @@ function getAdj() {
         var randomNoun = Math.floor(Math.random() * numNouns);
         var nounName = 'noun' + randomNoun;
         noun = snapshot.child(nounName).val().name;
+        $('#noun1').text(noun);
+        showRandomImage(noun, '#noun1');
         // console.log("There are " + snapshot.numChildren() + " nouns");
         // console.log(randomNoun);
         // console.log(snapshot.child(nounName).val().name);
@@ -36,6 +38,9 @@ function getAdj() {
 
             console.log(response);
 
+        noun = snapshot.child(nounName).val().name;
+        $('#noun2').text(noun);
+        showRandomImage(noun, '#noun2');
             //get a random word from the Datamuse array
             var randomDataMuse = Math.floor(Math.random() * response.length);
 
@@ -93,21 +98,24 @@ function getNoun2() {
         // console.log(snapshot.child(adjName).val().name);
 
         adj = snapshot.child(adjName).val().name;
-        // $('#adjective').text(adj);
-
-        var queryURL = "https://api.datamuse.com/words?rel_jja=" + adj;
-
-        $.ajax({
-            url: queryURL,
-            method: "GET"
-        }).then(function (response) {
-            console.log(response);
-            
-            var randomDataMuse = Math.floor(Math.random() * response.length);
-            var dataMuseWord = response[randomDataMuse].word;
-            $('#noun2').text(dataMuseWord);
-        });
+        $('#adjective').text(adj);
+        showRandomImage(adj, "#adjective");
     })
+    // $('#adjective').text(adj);
+
+    var queryURL = "https://api.datamuse.com/words?rel_jja=" + adj;
+
+    $.ajax({
+        url: queryURL,
+        method: "GET"
+    }).then(function (response) {
+        console.log(response);
+
+        var randomDataMuse = Math.floor(Math.random() * response.length);
+        var dataMuseWord = response[randomDataMuse].word;
+        $('#noun2').text(dataMuseWord);
+    });
+
 }
 
 
@@ -234,6 +242,29 @@ submitEmailForAuth(userEmail,userPass,saveLoginChecked);
 });
 
 
+
+function showRandomImage (searchWord, divID) {
+    var queryURL = "https://www.googleapis.com/customsearch/v1?q=" + searchWord + "&cx=008015619189080859829%3Agapxkuki8im&key=AIzaSyC0OrvTZD_SB6qRfqRPu7L_F2ugZTzA8pE";
+
+    $.ajax({
+        url: queryURL,
+        method: "GET",
+        dataType: 'jsonp'
+    }).then(function(response) {
+        console.log(response);
+        var results = response.items;
+        for (var i = 0; i < 3; i++) {
+            var randomImage = $("<img>");
+            var sourceArr = results[i].pagemap.cse_image;
+            var sourceUrl = sourceArr[0].src;
+            randomImage.attr("src", sourceUrl);
+            randomImage.attr('width', 200).attr('height', 200)
+            $(divID).parent("div").append(randomImage); 
+        }
+        $(divID).parent("div").append("<br>");
+    });
+     
+}
 
 // Materialize JavaScript components
 
