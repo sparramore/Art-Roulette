@@ -1,85 +1,161 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <link rel="stylsheet" type="text/css" href="assets/css/reset.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
-        crossorigin="anonymous">
-    <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
-    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
-    <script src="https://www.gstatic.com/firebasejs/5.1.0/firebase.js"></script>
-    <title>Document</title>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylsheet" type="text/css" href="assets/css/reset.css">
+  <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous"> -->
+  <!--Import Google Icon Font-->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!--Import Materialize-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
+  
+  <script src="https://www.gstatic.com/firebasejs/5.1.0/firebase.js"></script>
+  <title>Art-Roulette</title>
+  
 </head>
 <body>
 
-    <h1 id='adjective'></h1>
-
-    <h1 id='noun1'></h1>
-
-    <h1 id="noun2"></h1>
-    
-
-    <!-- Modal -->
-    <div id="userLoginModal" class="modal show" role="dialog">
-        <div class="modal-dialog">
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 id="user-Login-Modal-Title">Please enter your e-mail and password</h4>
-                </div>
-                <div class="modal-body">
-                    <row>
-                        <div class="col-lg-12">
-                            <p id="userNameTextPrompt">User Name</p>
-                            <input id="e-mail-Sub" type="text" autocomplete="off">
-                        </div>
-                        <div class="col-lg-12">
-                            <p id="userNameTextPrompt">Password</p>
-                            <input id="pass-Sub" type="text" autocomplete="off">
-                        </div>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                              <input type="checkbox" aria-label="Checkbox for following text input">  
-                            </div>
-                            <span class="input-group-text" id="automaticLogin">Log in Automatically?</span>
-                        </div>
-                    </row>
-                    
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" id="user-Login-Modal-Submit" data-dismiss="modal">Submit</button>
-                </div>
-            </div>
-
+  <div class="navbar-fixed">
+    <nav class="red darken-2">
+      <div class="container">
+        <div class="nav-wrapper">
+          <!-- FAB Code - Login and options menu. -->
+          <div class="fixed-action-btn">
+            <a class="btn-floating btn-large cyan darken-2 tooltipped" data-position="bottom" data-tooltip="Menu">
+              <i class="large material-icons">dehaze</i>
+            </a>
+            <ul>
+              <li><a href="#userLoginModal" class="btn-floating modal-trigger tooltipped green darken-2" data-position="bottom" data-tooltip="Sign In"><i class="material-icons">fingerprint</i></a></li>
+              <li><a href="#settingsModal" class="btn-floating modal-trigger tooltipped blue" data-position="bottom" data-tooltip="Settings"><i class="material-icons">settings_applications</i></a></li>
+            </ul>
+          </div>
+          <!-- Application logo -->
+          <a id="navbarLogo" href="#!" class="right">Art-Roulette!</a>
         </div>
-    </div>
+      </div>
+    </nav>
+  </div>
 
-    <!-- Modal -->
-    <div id="userLoginErrorModal" class="modal show" role="dialog">
-        <div class="modal-dialog">
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 id="user-Error-Modal-Title"></h4>
-                </div>
-                <div class="modal-body">
-                    <h5 id="user-Error-Modal-Body"></h5>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" id="user-Error-Modal-Submit" data-dismiss="modal">Okay</button>
-                </div>
-            </div>
 
+  <!-- Login modal -->
+  <div id="userLoginModal" class="modal" role="dialog">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 id="user-Login-Modal-Title">Please enter your e-mail and password</h4>
         </div>
+        <div class="modal-body">
+          <row>
+            <div class="col-lg-12">
+              <p id="userNameTextPrompt">User Name</p>
+              <input id="e-mail-Sub" type="text" autocomplete="off">
+            </div>
+            <div class="col-lg-12">
+              <p id="userNameTextPrompt">Password</p>
+              <input id="pass-Sub" type="text" autocomplete="off">
+            </div>
+            <div class="input-group">
+              <div class="input-group-prepend">
+              <input type="checkbox" aria-label="Checkbox for following text input">  
+              </div>
+              <span class="input-group-text" id="automaticLogin">Log in Automatically?</span>
+            </div>
+          </row>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default modal-close" id="user-Login-Modal-Submit" data-dismiss="modal">Submit</button>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <div type="button" class="btn btn-primary" id="loginButton">submit</div>
+  <!-- Settings modal - Not sure if needed. -->
+  <div id="settingsModal" class="modal">
+    <div class="modal-content">
+      <h4>Possible "Settings" Modal</h4>
+      <p>Show user profile bar.</p>
+      <div id="userProfileShowToggle" class="switch">
+        <label>
+          Off
+          <input type="checkbox">
+          <span class="lever"></span>
+          On
+        </label>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-close waves-effect waves-green btn-flat">DONE</a>
+    </div>
+  </div>
+
+  <!-- Second navbar -->
+  <nav id="userProfileNavbar" class="hide">
+    <div class="nav-wrapper">
+      <div class="row">
+        <div class="col s12 center-align">
+          <!-- User's Profile picture. -->
+          <div class="circle red" style="background-image: url('./assets/images/generic_user.png')"></div>
+          <!-- User name under profile picture. -->
+          <div id="userName" class="blue-text">User Name</div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+<div type="button" class="btn btn-primary" id="loginButton">submit</div>
 <script type="text/javascript" src="js/materialize.min.js"></script>
 </body>
 
-<script src="assets/javascript/game.js"></script>
 
+  <!-- Button to generate words -->
+  <div class="row">
+    <div class="col s12 center-align">
+      <a id="navbarButton" class="waves-effect waves-light btn-large">INSPIRE ME!</a>
+    </div>
+  </div>
+  <!-- Random word displays. -->
+  <div class="row">
+    <div class="col m4 word-result"><div class="card-panel grey"><h1 id='adjective' class="flow-text"></h1></div></div>
+    <div class="col m4 word-result"><div class="card-panel grey"><h1 id='noun1' class="flow-text"></h1></div></div>
+    <div class="col m4 word-result"><div class="card-panel grey"><h1 id="noun2" class="flow-text"></h1></div></div>
+  </div>
+  <!-- Roulette display. ToDo: Enhance to only appear while the search is happening and/or change the graphic.-->
+  <div class="row">
+    <div class="col s12 m4 offset-m4"><div id="bottomRouletteImage" class="card-panel grey" ></div></div>
+  </div>
+
+  <!-- Links sections - For additional pages, images and so on. Add divs with the "collapsible-body" class to have additional items.-->
+  <div class="row">
+    <div class="col s12 m6">
+      <ul class="collapsible popout">
+        <li>
+          <div class="collapsible-header"><h5>Section Header - Click me.</h5></div>
+          <div class="collapsible-body"><h6>Words with links or something.</h6></div>
+          <a class="collapsible-body" href="https://google.com">Google</a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="col s12 m6">
+      <ul class="collapsible popout">
+        <li>
+          <div class="collapsible-header"><h5>This other section</h5></div>
+          <div class="collapsible-body"><h6>Words with links or something.</h6></div>
+          <a class="collapsible-body" href="https://bing.com">Bing</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+
+  <!-- Custom JavaScript -->
+  <script src="assets/javascript/game.js"></script>
+</body>
 </html>
