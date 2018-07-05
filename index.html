@@ -44,47 +44,70 @@
 
 
   <!-- Login modal -->
-  <div id="userLoginModal" class="modal" role="dialog">
-    <div class="modal-dialog">
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 id="user-Login-Modal-Title">Please enter your e-mail and password</h4>
-        </div>
-        <div class="modal-body">
-          <row>
-            <div class="col-lg-12">
-              <p id="userNameTextPrompt">User Name</p>
-              <input id="e-mail-Sub" type="text" autocomplete="off">
+  <div id="userLoginModal" class="modal">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 id="user-Login-Modal-Title">Please enter your e-mail and password</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col s12">
+            <!-- <p id="userNameTextPrompt">User Name</p>
+            <input id="e-mail-Sub" type="text" autocomplete="off">
+          </div> -->
+          <div class="input-field col s12">
+            <input id="e-mail-Sub" type="email" class="validate">
+            <label for="e-mail-Sub">Email</label>
+          </div>
+          <!-- <div class="col-lg-12">
+            <p id="userNameTextPrompt">Password</p>
+            <input id="pass-Sub" type="text" autocomplete="off">
+          </div> -->
+          <div class="input-field col s12">
+            <input id="pass-Sub" type="password" class="validate">
+            <label for="pass-Sub">Password</label>
+          </div>
+          <p>
+            <label>
+              <input id="automaticLogin" type="checkbox" />
+              <span class="input-group-text" >Log in Automatically?</span>
+            </label>
+          </p>
+          <!-- <div class="input-group">
+            <div class="input-group-prepend">
+            <input type="checkbox" aria-label="Checkbox for following text input">  
             </div>
-            <div class="col-lg-12">
-              <p id="userNameTextPrompt">Password</p>
-              <input id="pass-Sub" type="text" autocomplete="off">
-            </div>
-            <div class="input-group">
-              <div class="input-group-prepend">
-              <input type="checkbox" aria-label="Checkbox for following text input">  
-              </div>
-              <span class="input-group-text" id="automaticLogin">Log in Automatically?</span>
-            </div>
-          </row>
+            <span class="input-group-text" id="automaticLogin">Log in Automatically?</span>
+          </div> -->
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default modal-close" id="user-Login-Modal-Submit" data-dismiss="modal">Submit</button>
-        </div>
+      </div>
+      <div class="modal-footer">
+        <!-- <button type="button" class="btn btn-default modal-close" id="user-Login-Modal-Submit" data-dismiss="modal">Submit</button> -->
+        <button id="loginButton" class="btn waves-effect waves-light modal-close" type="button" name="action">Submit
+          <i class="material-icons right">send</i>
+        </button>
+        <!-- Sign up button - Testing authentication at Firebase. -->
+        <button id="userSignUpButton" class="btn orange darken-2 waves-effect waves-light modal-close" type="button" name="action">Sign Up!
+          <i class="material-icons right">person_add</i>
+        </button>
+        <button id="userLogOutButton" class="btn red darken-2 waves-effect waves-light modal-close hide" type="button" name="action">Log Out
+          <i class="material-icons right">directions_run</i>
+        </button>
+      </div>
       </div>
     </div>
   </div>
 
-  <!-- Settings modal - Not sure if needed. -->
+  <!-- Settings modal. -->
   <div id="settingsModal" class="modal">
     <div class="modal-content">
       <h4>Possible "Settings" Modal</h4>
       <p>Show user profile bar.</p>
-      <div id="userProfileShowToggle" class="switch">
+      <div class="switch">
         <label>
           Off
-          <input type="checkbox">
+          <input id="userProfileShowToggle" type="checkbox">
           <span class="lever"></span>
           On
         </label>
@@ -95,35 +118,107 @@
     </div>
   </div>
 
-  <!-- Second navbar -->
+  <!-- Second (User information) navbar -->
   <nav id="userProfileNavbar" class="hide">
     <div class="nav-wrapper">
       <div class="row">
-        <div class="col s12 center-align">
+        <div class="col s4 center-align">
+          <!-- User name under profile picture. -->
+          <div id="userName" class="blue-grey-text text-darken-2">User Name</div>
+        </div>
+        <div class="col s4 center-align">
           <!-- User's Profile picture. -->
           <div class="circle red" style="background-image: url('./assets/images/generic_user.png')"></div>
+        </div>
+        <div class="col s4 center-align">
           <!-- User name under profile picture. -->
-          <div id="userName" class="blue-text">User Name</div>
+          <div id="userName" class="blue-grey-text text-darken-2">User Name</div>
         </div>
       </div>
     </div>
   </nav>
 
-    <!-- Images -->
-    <div class="row">
-        <div class="col" id="google-images"></div>
-    </div>
-    
-
-<div type="button" class="btn btn-primary" id="loginButton">submit</div>
-<script type="text/javascript" src="js/materialize.min.js"></script>
-</body>
-
-
-  <!-- Button to generate words -->
+  <!-- Experimenting with the use of Tabs to separate different "screens" (Main/User Profile) -->
   <div class="row">
-    <div class="col s12 center-align">
-      <a id="navbarButton" class="waves-effect waves-light btn-large">INSPIRE ME!</a>
+    <div class="col s12">
+      <ul class="tabs ">
+        <li class="tab col s6"><a class="active" href="#rouletteTab">Art Roulette</a></li>
+        <li class="tab col s6"><a href="#userProfileTab">User Profile</a></li>
+      </ul>
+    </div>
+    <!-- Art Roulette (main screen) section - selected by default when the site is accessed. -->
+    <div id="rouletteTab" class="col s12">
+      <!-- Button to generate words -->
+      <div class="row">
+        <div class="col s12 center-align">
+          <a id="wordButton" class="waves-effect waves-light btn-large">INSPIRE ME!</a>
+        </div>
+      </div>
+      <!-- Random word displays. -->
+      <div class="row">
+        <div class="col m4 word-result"><div class="card-panel grey"><h1 id='adjective' class="flow-text"></h1></div></div>
+        <div class="col m4 word-result"><div class="card-panel grey"><h1 id='noun1' class="flow-text"></h1></div></div>
+        <div class="col m4 word-result"><div class="card-panel grey"><h1 id="noun2" class="flow-text"></h1></div></div>
+      </div>
+      <!-- Roulette display. ToDo: Enhance to only appear while the search is happening and/or change the graphic.-->
+      <div class="row">
+        <div class="col s12 m4 offset-m4"><div id="bottomRouletteImage" class="card-panel grey" ></div></div>
+      </div>
+    </div>
+    <!-- User profile, should only have content accessible to logged in users. Maybe should have the "disabled" class until user logs in. -->
+    <div id="userProfileTab" class="col s12">
+      <div class="row">
+        <!-- User information section. -->
+        <div class="col s12 m6">
+          <div class="card-panel teal">
+            <h5 class="white-text">User Info</h5>
+              <ul class="userInfo white-text">
+                <li>Name: </li>
+                <li>Location: </li>
+                <li>Interests: </li>
+              </ul>
+          </div>
+        </div>
+        <div class="col s12 m6">
+          <div class="card-panel teal">
+            <h5 class="white-text">Likes/Comments or something.</h5>
+              <ul class="userSocial white-text">
+                <li>Likes: </li>
+                <li>Comments: </li>
+                <li>Favorited: </li>
+              </ul>
+          </div>
+        </div>
+      </div>
+      <!-- Upload form -->
+      <div class="row">
+        <div class="col s12 m12">
+            <div id="filesubmit">
+                <input type="file" class="file-select" accept="image/*"/>
+                <button class="file-submit waves-effect waves-light btn">SUBMIT</button>
+            </div>
+          </div>
+      </div>
+      
+        
+      <!-- User uploaded images. -->
+      <div id="userGallery" class="row">
+        <a class="carousel-item" href="#one!"><img src="./assets/images/birds.jpeg"></a>
+        <a class="carousel-item" href="#two!"><img src="./assets/images/birds.jpeg"></a>
+        <a class="carousel-item" href="#three!"><img src="./assets/images/birds.jpeg"></a>
+        <a class="carousel-item" href="#four!"><img src="./assets/images/birds.jpeg"></a>
+        <a class="carousel-item" href="#five!"><img src="./assets/images/birds.jpeg"></a>
+        <a class="carousel-item" href="#one!"><img src="./assets/images/birds.jpeg"></a>
+        <a class="carousel-item" href="#two!"><img src="./assets/images/birds.jpeg"></a>
+        <a class="carousel-item" href="#three!"><img src="./assets/images/birds.jpeg"></a>
+        <a class="carousel-item" href="#four!"><img src="./assets/images/birds.jpeg"></a>
+        <a class="carousel-item" href="#five!"><img src="./assets/images/birds.jpeg"></a>
+        <a class="carousel-item" href="#one!"><img src="./assets/images/birds.jpeg"></a>
+        <a class="carousel-item" href="#two!"><img src="./assets/images/birds.jpeg"></a>
+        <a class="carousel-item" href="#three!"><img src="./assets/images/birds.jpeg"></a>
+        <a class="carousel-item" href="#four!"><img src="./assets/images/birds.jpeg"></a>
+        <a class="carousel-item" href="#five!"><img src="./assets/images/birds.jpeg"></a>
+      </div>
     </div>
   </div>
   <!-- Random word displays. -->
@@ -137,11 +232,6 @@
     <div class="col s12 m4 offset-m4"><div id="bottomRouletteImage" class="card-panel grey" ></div></div>
   </div>
 
-  <!-- Upload form -->
-  <div id="filesubmit">
-    <input type="file" class="file-select" accept="image/*"/>
-    <button class="file-submit">SUBMIT</button>
-  </div>
 
   <!-- Links sections - For additional pages, images and so on. Add divs with the "collapsible-body" class to have additional items.-->
   <div class="row">

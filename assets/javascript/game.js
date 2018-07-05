@@ -175,7 +175,37 @@ function LoginToServer()
 
 $("#loginButton").on("click",function()
 {
-    LoginToServer();
+    //LoginToServer();
+    var userEmail = $("#e-mail-Sub").val();
+    var userPass = $("#pass-Sub").val();
+    auth.signInWithEmailAndPassword(userEmail, userPass);
+    console.log("Signed In!");
+});
+
+// Authentication status listener - Jonathan
+firebase.auth().onAuthStateChanged(firebaseUser => {
+  if(firebaseUser) {
+    console.log(firebaseUser);
+    console.log("User logged in!");
+    $("#userProfileNavbar").removeClass("hide");
+    $("#userLogOutButton").removeClass("hide");
+    
+  }
+  else {
+    console.log("User not logged in!");
+    $("#userProfileNavbar").addClass("hide");
+    $("#userLogOutButton").addClass("hide");
+  }
+});
+
+//Logout button event listener - Jonathan
+$("#userLogOutButton").on("click", function() {
+  firebase.auth().signOut().then(function() {
+    console.log("User signed out!");
+    // Sign-out successful.
+  }).catch(function(error) {
+    // An error happened.
+  });
 });
 
 $(window).on('load', function()
@@ -210,8 +240,8 @@ $("#user-Error-Modal-Submit").on("click",function()
     $("#userLoginModal").show();
 });
 
-//our modal dialog's submit button clicked
-$("#user-Login-Modal-Submit").on("click",function() {
+//our modal dialog's submit button clicked - user-Login-Modal-Submit
+$("#userSignUpButton").on("click",function() {
 
 
 //get the users email and password.
@@ -269,7 +299,6 @@ function showRandomImage (searchWord, divID) {
         }
         $(divID).html(imageDiv); 
     });
-     
 }
 
 // Materialize JavaScript components
@@ -283,9 +312,11 @@ $(document).ready(function() {
   $('.modal').modal();
   $('.trigger-modal').modal();
   $('.tooltipped').tooltip();
+  $('.tabs').tabs();
+  $('textarea#userInterests').characterCounter();
 
   // Listener for "word generator" button.
-  $("#navbarButton").on("click", function() {
+  $("#wordButton").on("click", function() {
     getAdj();
     getNoun1();
     getNoun2();
@@ -293,7 +324,7 @@ $(document).ready(function() {
 
   // Listener for checkbox on "Settings" modal, shows/hides the user profile bar.
   $("input:checkbox").change(function() {
-    if($(this).is(":checked")) {
+    if($("#userProfileShowToggle").is(":checked")) {
       $("#userProfileNavbar").removeClass("hide");
     }
     else {
