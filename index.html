@@ -190,6 +190,17 @@
           </div>
         </div>
       </div>
+      <!-- Upload form -->
+      <div class="row">
+        <div class="col s12 m12">
+            <div id="filesubmit">
+                <input type="file" class="file-select" accept="image/*"/>
+                <button class="file-submit waves-effect waves-light btn">SUBMIT</button>
+            </div>
+          </div>
+      </div>
+      
+        
       <!-- User uploaded images. -->
       <div id="userGallery" class="row">
         <a class="carousel-item" href="#one!"><img src="./assets/images/birds.jpeg"></a>
@@ -209,6 +220,16 @@
         <a class="carousel-item" href="#five!"><img src="./assets/images/birds.jpeg"></a>
       </div>
     </div>
+  </div>
+  <!-- Random word displays. -->
+  <div class="row">
+    <div class="col m4 word-result"><div class="card-panel grey"><h1 id='adjective' class="flow-text"></h1></div><div id="rand-image-adj"></div></div>
+    <div class="col m4 word-result"><div class="card-panel grey"><h1 id='noun1' class="flow-text"></h1></div><div id="rand-image-noun1"></div></div>
+    <div class="col m4 word-result"><div class="card-panel grey"><h1 id="noun2" class="flow-text"></h1></div><div id="rand-image-noun2"></div></div>
+  </div>
+  <!-- Roulette display. ToDo: Enhance to only appear while the search is happening and/or change the graphic.-->
+  <div class="row">
+    <div class="col s12 m4 offset-m4"><div id="bottomRouletteImage" class="card-panel grey" ></div></div>
   </div>
 
 

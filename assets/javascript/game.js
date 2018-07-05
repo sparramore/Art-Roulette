@@ -9,6 +9,11 @@ var config = {
 };
 
 firebase.initializeApp(config);
+//storageService is a reference to firebase storage service (it allows us to use all of the methods firebase makes available for storing data and files)
+const storageService = firebase.storage();
+// storageRef is a reference to our actual instantiation of that service — it will lead us to your specific database and root file location where things get uploaded.
+const storageRef = storageService.ref();
+
 var database = firebase.database();
 var auth = firebase.auth();
 var adj = '';
@@ -23,7 +28,7 @@ function getAdj() {
         var nounName = 'noun' + randomNoun;
         noun = snapshot.child(nounName).val().name;
         $('#noun1').text(noun);
-        showRandomImage(noun, '#noun1');
+        showRandomImage(noun, '#rand-image-noun1');
         // console.log("There are " + snapshot.numChildren() + " nouns");
         // console.log(randomNoun);
         // console.log(snapshot.child(nounName).val().name);
@@ -40,7 +45,7 @@ function getAdj() {
 
         noun = snapshot.child(nounName).val().name;
         $('#noun2').text(noun);
-        showRandomImage(noun, '#noun2');
+        showRandomImage(noun, '#rand-image-noun2');
             //get a random word from the Datamuse array
             var randomDataMuse = Math.floor(Math.random() * response.length);
 
@@ -99,7 +104,7 @@ function getNoun2() {
 
         adj = snapshot.child(adjName).val().name;
         $('#adjective').text(adj);
-        showRandomImage(adj, "#adjective");
+        showRandomImage(adj, "#rand-image-adj");
     })
     // $('#adjective').text(adj);
 
@@ -283,15 +288,16 @@ function showRandomImage (searchWord, divID) {
     }).then(function(response) {
         console.log(response);
         var results = response.items;
+        var imageDiv = $("<div>");
         for (var i = 0; i < 3; i++) {
             var randomImage = $("<img>");
             var sourceArr = results[i].pagemap.cse_image;
             var sourceUrl = sourceArr[0].src;
             randomImage.attr("src", sourceUrl);
-            randomImage.attr('width', 200).attr('height', 200)
-            $(divID).parent("div").append(randomImage); 
+            randomImage.attr('width', 200).attr('height', 200);
+            $(imageDiv).append(randomImage);
         }
-        $(divID).parent("div").append("<br>");
+        $(divID).html(imageDiv); 
     });
 }
 
@@ -326,3 +332,31 @@ $(document).ready(function() {
     }
   });
 });
+
+// Upload functionatity
+document.querySelector('.file-select').addEventListener('change', handleFileUploadChange);
+document.querySelector('.file-submit').addEventListener('click', handleFileUploadSubmit);
+
+let selectedFile;
+// handleFileUploadChange function gets triggered any time someone selects a new file via the upload via the Choose File upload button
+function handleFileUploadChange(e) {
+    // selectedFile that will keep track of whatever file a user has input via the Choose File button
+  selectedFile = e.target.files[0];
+}
+
+function handleFileUploadSubmit(e) {
+    const uploadTask = storageRef.child(`images/${selectedFile.name}`).put(selectedFile); //create a child directory called images, and place the file inside this directory
+    uploadTask.on('state_changed', (snapshot) => {
+    // Observe state change events such as progress, pause, and resume
+    }, (error) => {
+      // Handle unsuccessful uploads
+      console.log(error);
+    }, () => {
+       // Do something once upload is complete
+       console.log('success');
+    });
+  }
+
+function showUploads () {
+    
+}

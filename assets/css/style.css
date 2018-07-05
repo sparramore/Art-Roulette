@@ -111,3 +111,6 @@
     transition: 1s; 
   }
 }
+#filesubmit {
+  text-align: center;
+}
