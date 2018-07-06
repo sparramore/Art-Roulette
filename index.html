@@ -99,6 +99,38 @@
     </div>
   </div>
 
+  <!-- User Profile information modal. -->
+  <div id="userProfileModal" class="modal">
+      <div class="modal-content">
+        <h4>My Profile Information:</h4>
+        <div class="row">
+          <form class="col s12">
+            <div class="row">
+              <div class="input-field col s12">
+                <input id="userProfileNameEntry" type="text" class="validate">
+                <label for="userProfileNameEntry">Name</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <input id="userProfileLocationEntry" type="text">
+                <label for="userProfileLocationEntry">Location</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <textarea id="userInfoInterestsEntry" class="materialize-textarea"></textarea>
+                <label for="userInfoInterestsEntry">Interests</label>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">DONE</a>
+      </div>
+    </div>
+
   <!-- Settings modal. -->
   <div id="settingsModal" class="modal">
     <div class="modal-content">
@@ -167,15 +199,21 @@
     </div>
     <!-- User profile, should only have content accessible to logged in users. Maybe should have the "disabled" class until user logs in. -->
     <div id="userProfileTab" class="col s12">
+      <!-- Options for the user to enter the relevant data to their profile. -->
+      <div class="row">
+        <div class="col s12 center-align">
+          <a id="userInfoFillButton" class="waves-effect waves-light btn-large modal-trigger" href="#userProfileModal">My Profile</a>
+        </div>
+      </div>
       <div class="row">
         <!-- User information section. -->
         <div class="col s12 m6">
           <div class="card-panel teal">
             <h5 class="white-text">User Info</h5>
               <ul class="userInfo white-text">
-                <li>Name: </li>
-                <li>Location: </li>
-                <li>Interests: </li>
+                <li id="userInfoNameText">Name: </li>
+                <li id="userInfoLocationText">Location: </li>
+                <li id="userInfoInterestsText">Interests: </li>
               </ul>
           </div>
         </div>
@@ -183,9 +221,9 @@
           <div class="card-panel teal">
             <h5 class="white-text">Likes/Comments or something.</h5>
               <ul class="userSocial white-text">
-                <li>Likes: </li>
-                <li>Comments: </li>
-                <li>Favorited: </li>
+                <li id="userSocialLikes">Likes: </li>
+                <li id="userSocialComments">Comments: </li>
+                <li id="userSocialFavorited">Favorited: </li>
               </ul>
           </div>
         </div>

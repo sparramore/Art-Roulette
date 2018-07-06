@@ -142,7 +142,7 @@ function getNoun2() {
       console.log("The read failed: " + errorObject.code);
     });
     
-// Start of Authentication logic organization/changes.
+// Start of Authentication logic organization/changes. At this point authentication persists throughout sessions as long as the user does not explicitly log out.
 
 // Authentication status listener - Setting this first on the Authentication logic.
 firebase.auth().onAuthStateChanged(firebaseUser => {
@@ -341,6 +341,8 @@ $(document).ready(function() {
       $("#userProfileNavbar").addClass("hide");
     }
   });
+
+  // Listener for the user profile button, summons the corresponding modal and displays the information entered.
 });
 
 // Upload functionatity
