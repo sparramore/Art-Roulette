@@ -4,7 +4,7 @@ var config = {
     authDomain: "art-roulette-2ffee.firebaseapp.com",
     databaseURL: "https://art-roulette-2ffee.firebaseio.com",
     projectId: "art-roulette-2ffee",
-    storageBucket: "",
+    storageBucket: "gs://art-roulette-2ffee.appspot.com",
     messagingSenderId: "1037636482050"
 };
 
@@ -18,6 +18,8 @@ var database = firebase.database();
 var auth = firebase.auth();
 var adj = '';
 var noun = '';
+//To store user information after login.
+var user;
 
 //get the Adjective, we use our nouns list in the database to generate a list of adjectives with Datamuse
 function getAdj() {
@@ -119,27 +121,73 @@ function getNoun2() {
         var randomDataMuse = Math.floor(Math.random() * response.length);
         var dataMuseWord = response[randomDataMuse].word;
         $('#noun2').text(dataMuseWord);
+      });
+      
+    }
+    
+    
+    // getAdj();
+    // getNoun1();
+    // getNoun2();
+    
+    
+    //console.log our nouns and adjectives database lists for error checking
+    database.ref().on("value", function (snapshot) {
+      
+      console.log(snapshot.val().nouns);
+      console.log(snapshot.val().adjectives);
+      
+    }, function (errorObject) {
+      // Create Error Handling
+      console.log("The read failed: " + errorObject.code);
     });
+    
+// Start of Authentication logic organization/changes.
 
-}
-
-
-// getAdj();
-// getNoun1();
-// getNoun2();
-
-
-//console.log our nouns and adjectives database lists for error checking
-database.ref().on("value", function (snapshot) {
-
-    console.log(snapshot.val().nouns);
-    console.log(snapshot.val().adjectives);
-
-}, function (errorObject) {
-    // Create Error Handling
-    console.log("The read failed: " + errorObject.code);
+// Authentication status listener - Setting this first on the Authentication logic.
+firebase.auth().onAuthStateChanged(firebaseUser => {
+  if(firebaseUser) {
+    console.log("User: " + firebaseUser.email + " logged in!");
+    $("#userProfileNavbar").removeClass("hide");
+    $("#userLogOutButton").removeClass("hide");
+    user = firebase.auth().currentUser;
+  }
+  else {
+    console.log("No users logged in!");
+    $("#userProfileNavbar").addClass("hide");
+    $("#userLogOutButton").addClass("hide");
+    user = "";
+  }
 });
 
+$(window).on('load', function()
+{ 
+  // console.log("login: " + localStorage.getItem("art-Roulette-Submitted-Email"));
+  // console.log("automatic login: " + localStorage.getItem("art-Roulette-SaveLogin"));
+  if(!localStorage.getItem("art-Roulette-Submitted-Email"))
+  {
+    $("#userLoginModal").show();
+  }
+  
+  if(localStorage.getItem("art-Roulette-SaveLogin"))
+  {
+    $("#user-Login-Modal-Submit").hide();
+    LoginToServer();
+  }
+});
+
+// What is this call's function? Doesn't seem linked to anything in particular.
+// auth.signOut().then(function() {
+//   // Sign-out successful.
+// }).catch(function(error) {
+//   // An error happened.
+//   var errorCode = error.code;
+//   var errorMessage = error.message;
+//   console.log(error);
+//   console.log(error.message);
+// });
+
+// Sign Up button function.
 function submitEmailForAuth(userEmail,userPass,saveLoginChecked)
 {
     auth.createUserWithEmailAndPassword(userEmail, userPass).catch(function(error) {
@@ -158,13 +206,17 @@ function submitEmailForAuth(userEmail,userPass,saveLoginChecked)
 
       if(saveLoginChecked)
       {
-          LoginToServer();
+          //LoginToServer();
+          //Using persistence throughout sessions, only an explicit logout will no longer automatically start the session with the user logged in.
+          firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
       }
 }
 
+// Login button function.
 function LoginToServer()
 {
-    console.log("logging in!");
+    //console.log("logging in!");
+    console.log("Logging in via local storage!");
     auth.signInWithEmailAndPassword(localStorage.getItem("art-Roulette-Submitted-Email"), localStorage.getItem("art-Roulette-Pass")).catch(function(error) {
         // Handle Errors here.
         var errorCode = error.code;
@@ -172,7 +224,49 @@ function LoginToServer()
         // ...
       });
 }
+// Commenting out the error modal in the meantime.
+// $("#user-Error-Modal-Submit").on("click",function()
+// {
+//   $("#userLoginErrorModal").hide();
+//   $("#userLoginModal").show();
+// });
 
+//our modal dialog's submit button clicked - user-Login-Modal-Submit
+$("#userSignUpButton").on("click",function() {
+  //get the users email and password.
+  var userEmail = $("#e-mail-Sub").val();
+  var userPass = $("#pass-Sub").val();
+  var saveLoginChecked = false;
+  saveLoginChecked = $('#automaticLogin').is(":checked");
+  console.log("The status of the autoLogin checkbox is: " + saveLoginChecked);
+  
+  console.log("userEmail: " + userEmail);
+  console.log("userPass: " + userPass);
+  console.log("login checked: " + saveLoginChecked);
+  
+  //we are going to hide our login modal just because if we are having issues we are going to need to display another modal.
+  $("#userLoginModal").hide();
+  
+  //if they failed to enter text for the email or password throw up an error modal
+  if(userEmail === "" || userPass === "") {
+    //fill the error title and text
+    $("#user-Error-Modal-Title").text("User Error");
+    $("#user-Error-Modal-Body").text("please provide both a User Name and a Password");
+    $("#userLoginErrorModal").show();
+    
+    return;
+  }
+  
+  auth.signOut().then(function() {
+    // Sign-out successful.
+  }).catch(function(error) {
+    // An error happened.
+  });
+  
+  submitEmailForAuth(userEmail,userPass,saveLoginChecked);
+});
+
+// Listener for the Login button.
 $("#loginButton").on("click",function()
 {
     //LoginToServer();
@@ -182,23 +276,7 @@ $("#loginButton").on("click",function()
     console.log("Signed In!");
 });
 
-// Authentication status listener - Jonathan
-firebase.auth().onAuthStateChanged(firebaseUser => {
-  if(firebaseUser) {
-    console.log(firebaseUser);
-    console.log("User logged in!");
-    $("#userProfileNavbar").removeClass("hide");
-    $("#userLogOutButton").removeClass("hide");
-    
-  }
-  else {
-    console.log("User not logged in!");
-    $("#userProfileNavbar").addClass("hide");
-    $("#userLogOutButton").addClass("hide");
-  }
-});
-
-//Logout button event listener - Jonathan
+// Listener for the Log Out button.
 $("#userLogOutButton").on("click", function() {
   firebase.auth().signOut().then(function() {
     console.log("User signed out!");
@@ -208,79 +286,11 @@ $("#userLogOutButton").on("click", function() {
   });
 });
 
-$(window).on('load', function()
-{ 
-    console.log("login: " + localStorage.getItem("art-Roulette-Submitted-Email"));
-    console.log("automatic login: " + localStorage.getItem("art-Roulette-SaveLogin"));
-    if(!localStorage.getItem("art-Roulette-Submitted-Email"))
-    {
-        $("#userLoginModal").show();
-    }
-
-    if(localStorage.getItem("art-Roulette-SaveLogin"))
-    {
-        $("#user-Login-Modal-Submit").hide();
-        LoginToServer();
-    }
-});
-
-auth.signOut().then(function() {
-    // Sign-out successful.
-  }).catch(function(error) {
-    // An error happened.
-    var errorCode = error.code;
-    var errorMessage = error.message;
-    console.log(error);
-    console.log(error.message);
-  });
-
-$("#user-Error-Modal-Submit").on("click",function()
-{
-    $("#userLoginErrorModal").hide();
-    $("#userLoginModal").show();
-});
-
-//our modal dialog's submit button clicked - user-Login-Modal-Submit
-$("#userSignUpButton").on("click",function() {
-
-
-//get the users email and password.
-var userEmail = $("#e-mail-Sub").val();
-var userPass = $("#pass-Sub").val();
-var saveLoginChecked = false;
-saveLoginChecked = $('input[type=checkbox]').prop("checked");
-
-console.log("userEmail: " + userEmail);
-console.log("userPass: " + userPass);
-console.log("login checked: " + saveLoginChecked);
-
-  //we are going to hide our login modal just because if we are having issues we are going to need to display another modal.
-  $("#userLoginModal").hide();
-
-  //if they failed to enter text for the email or password throw up an error modal
-  if(userEmail === "" || userPass === "") {
-    //fill the error title and text
-    $("#user-Error-Modal-Title").text("User Error");
-    $("#user-Error-Modal-Body").text("please provide both a User Name and a Password");
-    $("#userLoginErrorModal").show();
-
-    return;
-}
-
-auth.signOut().then(function() {
-    // Sign-out successful.
-  }).catch(function(error) {
-    // An error happened.
-  });
-
-submitEmailForAuth(userEmail,userPass,saveLoginChecked);
-});
-
-
+// End of Authentication Logic changes/organization.
 
 function showRandomImage (searchWord, divID) {
-    var queryURL = "https://www.googleapis.com/customsearch/v1?q=" + searchWord + "&cx=008015619189080859829%3Agapxkuki8im&key=AIzaSyC0OrvTZD_SB6qRfqRPu7L_F2ugZTzA8pE";
-
+  var queryURL = "https://www.googleapis.com/customsearch/v1?q=" + searchWord + "&cx=008015619189080859829%3Agapxkuki8im&key=AIzaSyC0OrvTZD_SB6qRfqRPu7L_F2ugZTzA8pE";
+  
     $.ajax({
         url: queryURL,
         method: "GET",
