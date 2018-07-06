@@ -101,3 +101,15 @@
     transition: 1s; 
   }
 }
+
+.more-like-this {
+  visibility: hidden;
+}
+
+.inspirations-improved {
+  visibility: hidden;
+}
+
+.inspirations {
+  text-transform: capitalize;
+}
