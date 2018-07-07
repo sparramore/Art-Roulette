@@ -351,8 +351,8 @@ function handleFileUploadChange(e) {
 function handleFileUploadSubmit(e) {
      
     const uploadTask = storageRef.child(`/images/${selectedFile.name}`).put(selectedFile); //create a child directory called images, and place the file inside this directory
-    i = 0;
-    var sourceImgUrl;
+    
+    var imagesource = `/images/${selectedFile.name}`;
     uploadTask.on('state_changed', (snapshot) => {
     // Observe state change events such as progress, pause, and resume
     }, (error) => {
@@ -366,11 +366,29 @@ function handleFileUploadSubmit(e) {
           });
         console.log('success');
     });
-    var userImage = $("<img>");
-    userImage.attr("src", sourceImgUrl);
-    $(".carousel-item").eq(i).append(userImage);
-    i++;
 
+    var storage = firebase.storage();
+    var pathReference = storage.ref('images/stars.jpg');
+    
+    storageRef.child('images/stars.jpg').getDownloadURL().then(function(url) {
+        // `url` is the download URL for 'images/stars.jpg'
+      
+        // This can be downloaded directly:
+        var xhr = new XMLHttpRequest();
+        xhr.responseType = 'blob';
+        xhr.onload = function(event) {
+          var blob = xhr.response;
+        };
+        xhr.open('GET', url);
+        xhr.send();
+      
+        // Or inserted into an <img> element:
+        var img = $(".carousel-item").eq(i);
+        img.src = url;
+        i++;
+      }).catch(function(error) {
+        // Handle any errors
+      });
 
     
   }
