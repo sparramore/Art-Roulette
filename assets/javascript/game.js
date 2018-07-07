@@ -21,37 +21,27 @@ var auth = firebase.auth();
 //get the Adjective, we use our nouns list in the database to generate a list of adjectives with Datamuse
 function getAdj() {
     database.ref().child("nouns").once("value", function (snapshot) {
-          //get a random noun from our database
-          var numNouns = snapshot.numChildren();
-          var randomNoun = Math.floor(Math.random() * numNouns);
-          var nounName = 'noun' + randomNoun;
+        //get a random noun from our database
+        var numNouns = snapshot.numChildren();
+        var randomNoun = Math.floor(Math.random() * numNouns);
+        var nounName = 'noun' + randomNoun;
+        var noun = snapshot.child(nounName).val().name;
 
-          noun = snapshot.child(nounName).val().name;
-          $('#noun1').text(noun);
-          $('#more-like-adj').css('visibility', 'visible'); 
-          showRandomImage(noun, '#rand-image-noun1');
-          // console.log("There are " + snapshot.numChildren() + " nouns");
-          // console.log(randomNoun);
-          // console.log(snapshot.child(nounName).val().name);
-          //ajax query URL DataMuse API
-          var queryURL = "https://api.datamuse.com//words?rel_jjb=" + noun;
+        //show more like this button
+        $('#more-like-adj').css('visibility', 'visible');
 
-          $.ajax({
-              url: queryURL,
-              method: "GET"
-          }).then(function (response) {
+        //ajax query URL DataMuse API
+        var queryURL = "https://api.datamuse.com//words?rel_jjb=" + noun;
 
-
-              console.log(response);
-
-          noun = snapshot.child(nounName).val().name;
-          $('#noun2').text(noun);
-          showRandomImage(noun, '#rand-image-noun2');
-          //get a random word from the Datamuse array
-          var randomDataMuse = Math.floor(Math.random() * response.length);
-          var dataMuseWord = response[randomDataMuse].word;
-          showRandomImage(dataMuseWord, '#adj-pic');
-          $('#adjective').text(dataMuseWord);
+        $.ajax({
+            url: queryURL,
+            method: "GET"
+        }).then(function (response) {
+             //get a random word from the Datamuse array
+            var randomDataMuse = Math.floor(Math.random() * response.length);
+            var dataMuseWord = response[randomDataMuse].word;
+            showRandomImage(dataMuseWord, '#adj-pic');
+            $('#adjective').text(dataMuseWord);
         });
     })
 }
@@ -307,14 +297,15 @@ function showRandomImage(searchWord, divID) {
         dataType: 'jsonp'
     }).then(function (response) {
         var results = response.items;
-        var imageDiv = $("<div>");
-        var randomImage = $("<img>");
-        var sourceArr = results[1].pagemap.cse_image;
-        var sourceUrl = sourceArr[0].src;
-        randomImage.attr("src", sourceUrl);
-        randomImage.attr('width', 200).attr('height', 200).css('border', 'solid 1px black');
-        $(divID).append(randomImage)
-        $(divID).append("<br>");
+        //for (var i = 0; i < 1; i++) { *DO ONLY ONCE FOR TESTING PURPOSES
+            var randomImage = $("<img>");
+            var sourceArr = results[0].pagemap.cse_image;
+            var sourceUrl = sourceArr[0].src;
+            randomImage.attr("src", sourceUrl);
+            randomImage.attr('width', 200).attr('height', 200).css('border', 'solid 1px black');
+            $(divID).append(randomImage)
+            $(divID).append("<br>");
+        //}
     });
 }
 
@@ -338,6 +329,7 @@ $(document).ready(function() {
     getAdj();
     getNoun1();
     getNoun2();
+    $('.inspirations-improved').css('visibility', 'hidden');
   });
 
   // Listener for checkbox on "Settings" modal, shows/hides the user profile bar.
