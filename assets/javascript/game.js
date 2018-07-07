@@ -4,7 +4,7 @@ var config = {
     authDomain: "art-roulette-2ffee.firebaseapp.com",
     databaseURL: "https://art-roulette-2ffee.firebaseio.com",
     projectId: "art-roulette-2ffee",
-    storageBucket: "",
+    storageBucket: "gs://art-roulette-2ffee.appspot.com",
     messagingSenderId: "1037636482050"
 };
 
@@ -18,7 +18,8 @@ var database = firebase.database();
 var auth = firebase.auth();
 var adj = '';
 var noun = '';
-
+var uid;
+/*
 //get the Adjective, we use our nouns list in the database to generate a list of adjectives with Datamuse
 function getAdj() {
     database.ref().child("nouns").on("value", function (snapshot) {
@@ -123,7 +124,7 @@ function getNoun2() {
 
 }
 
-
+*/
 // getAdj();
 // getNoun1();
 // getNoun2();
@@ -187,14 +188,17 @@ firebase.auth().onAuthStateChanged(firebaseUser => {
   if(firebaseUser) {
     console.log(firebaseUser);
     console.log("User logged in!");
+    uid = firebaseUser.uid;
     $("#userProfileNavbar").removeClass("hide");
     $("#userLogOutButton").removeClass("hide");
     
   }
   else {
     console.log("User not logged in!");
+    uid = "";
     $("#userProfileNavbar").addClass("hide");
     $("#userLogOutButton").addClass("hide");
+    
   }
 });
 
@@ -345,18 +349,33 @@ function handleFileUploadChange(e) {
 }
 
 function handleFileUploadSubmit(e) {
-    const uploadTask = storageRef.child(`images/${selectedFile.name}`).put(selectedFile); //create a child directory called images, and place the file inside this directory
+     
+    const uploadTask = storageRef.child(`/images/${selectedFile.name}`).put(selectedFile); //create a child directory called images, and place the file inside this directory
+    i = 0;
+    var sourceImgUrl;
     uploadTask.on('state_changed', (snapshot) => {
     // Observe state change events such as progress, pause, and resume
     }, (error) => {
-      // Handle unsuccessful uploads
-      console.log(error);
+    // Handle unsuccessful uploads
+        console.log(error);
     }, () => {
-       // Do something once upload is complete
-       console.log('success');
+    // Do something once upload is complete
+        uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+            console.log('File available at', downloadURL);
+            sourceImgUrl = downloadURL;
+          });
+        console.log('success');
     });
-  }
+    var userImage = $("<img>");
+    userImage.attr("src", sourceImgUrl);
+    $(".carousel-item").eq(i).append(userImage);
+    i++;
 
-function showUploads () {
+
     
-}
+  }
+  
+  
+
+
+
