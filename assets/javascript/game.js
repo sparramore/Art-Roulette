@@ -19,7 +19,7 @@ var auth = firebase.auth();
 var adj = '';
 var noun = '';
 var uid;
-/*
+
 //get the Adjective, we use our nouns list in the database to generate a list of adjectives with Datamuse
 function getAdj() {
     database.ref().child("nouns").on("value", function (snapshot) {
@@ -124,7 +124,7 @@ function getNoun2() {
 
 }
 
-*/
+
 // getAdj();
 // getNoun1();
 // getNoun2();
