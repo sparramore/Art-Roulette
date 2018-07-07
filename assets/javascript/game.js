@@ -55,6 +55,7 @@ function getAdj() {
     })
 }
 
+
 //get the Noun, we use our adjective list in the database to generate a list of nouns with Datamuse
 function getNoun1() {
     database.ref().child("adjectives").once("value", function (snapshot) {
@@ -107,10 +108,10 @@ function getNoun2() {
             var dataMuseWord = response[randomDataMuse].word;
             showRandomImage(dataMuseWord, "#noun2-pic");
             $('#noun2').text(dataMuseWord);
-        });
-    })
-}
-
+          });
+        })
+      }
+      
 //click listener for More Like This buttons
 $(document).on('click', '.more-like-this', function () {
     if (this.id == 'more-like-adj') {
@@ -149,9 +150,9 @@ $(document).on('click', '.more-like-this', function () {
           database.ref().child("nouns").once("value", function (snapshot) {
               var numNoun = snapshot.numChildren();
               database.ref().child('nouns').child('noun' + numNoun).update({ name: $('#noun2').text() });
-          })
-      }
-    // //console.log our nouns and adjectives database lists for error checking
+            })
+          }
+          // //console.log our nouns and adjectives database lists for error checking
     // database.ref().on("value", function (snapshot) {
       
     //   console.log(snapshot.val().nouns);
@@ -194,8 +195,8 @@ firebase.auth().onAuthStateChanged(firebaseUser => {
 
 $(window).on('load', function()
 { 
-  // console.log("login: " + localStorage.getItem("art-Roulette-Submitted-Email"));
-  // console.log("automatic login: " + localStorage.getItem("art-Roulette-SaveLogin"));
+  console.log("login: " + localStorage.getItem("art-Roulette-Submitted-Email"));
+  console.log("automatic login: " + localStorage.getItem("art-Roulette-SaveLogin"));
   if(!localStorage.getItem("art-Roulette-Submitted-Email"))
   {
     $("#userLoginModal").show();
@@ -206,6 +207,7 @@ $(window).on('load', function()
     $("#user-Login-Modal-Submit").hide();
     LoginToServer();
   }
+  $('body').removeClass('fade-out');
 });
 
 function submitEmailForAuth(userEmail, userPass, saveLoginChecked) {
@@ -294,7 +296,21 @@ $("#loginButton").on("click",function() {
   var userPass = $("#pass-Sub").val();
   auth.signInWithEmailAndPassword(userEmail, userPass);
   console.log("Signed In!");
-});
+
+//   $(window).on('load', function () {
+//     console.log("login: " + localStorage.getItem("art-Roulette-Submitted-Email"));
+//     console.log("automatic login: " + localStorage.getItem("art-Roulette-SaveLogin"));
+//     if (!localStorage.getItem("art-Roulette-Submitted-Email")) {
+//         $("#userLoginModal").show();
+//     }
+
+//     if (localStorage.getItem("art-Roulette-SaveLogin")) {
+//         $("#user-Login-Modal-Submit").hide();
+//         LoginToServer();
+//     }
+
+//     $('body').removeClass('fade-out');
+ });
 
 // Listener for the Log Out button.
 $("#userLogOutButton").on("click", function() {
@@ -326,12 +342,12 @@ function showRandomImage(searchWord, divID) {
             randomImage.attr('width', 200).attr('height', 200).css('border', 'solid 1px black');
             $(divID).append(randomImage)
             $(divID).append("<br>");
-        //}
-    });
-}
-
-// Materialize JavaScript components
-
+            //}
+          });
+        }
+        
+        // Materialize JavaScript components
+        
 
 $(document).ready(function() {
   // Materialize elements initialization
@@ -380,6 +396,8 @@ $(document).ready(function() {
     $("#userInfoLocationText").html("<b>Location: </b>" + userProfileLocation);
     $("#userInfoBioText").html("<b>Bio: </b>" + userProfileBio);
   });
+
+  selectRandomColorSchemeAndApply();
 });
 
 // Upload functionatity
@@ -409,3 +427,75 @@ function handleFileUploadSubmit(e) {
 function showUploads () {
     
 }
+
+function selectRandomColorSchemeAndApply()
+{
+    console.log("selectRandom");
+    var randoScheme = Math.floor(Math.random() * ColorSchemeArray.length); 
+    $("#headerColor").addClass(ColorSchemeArray[randoScheme][0][0]);
+    $("#headerColor").addClass(ColorSchemeArray[randoScheme][0][1]);
+
+    //console.log();
+    $(".card-panel").each(function() {
+        $(this).addClass(ColorSchemeArray[randoScheme][1][0]);
+        $(this).addClass(ColorSchemeArray[randoScheme][1][1]);
+    });
+
+    $(".collapsible-header").each(function() {
+        $(this).addClass(ColorSchemeArray[randoScheme][2][0]);
+        $(this).addClass(ColorSchemeArray[randoScheme][2][1]);
+    });
+
+    console.log(ColorSchemeArray[randoScheme][2][0]);
+    console.log(ColorSchemeArray[randoScheme][2][1]);
+
+    $(".collapsible-body").each(function() {
+        $(this).addClass(ColorSchemeArray[randoScheme][3][0]);
+        $(this).addClass(ColorSchemeArray[randoScheme][3][1]);
+    });
+    
+
+}
+//section for the random color generation
+var currentBackgroundIndex;
+var ColorSchemeArray;
+
+ColorSchemeArray = [
+    [
+        ["teal","darken-4"],
+        ["teal","darken-3"],
+        ["teal","darken-1"],
+        ["teal","lighten-3"],
+    ],
+    [
+        ["cyan","darken-4"],
+        ["green","lighten-1"],
+        ["blue","darken-4"],
+        ["blue","accent-1"],
+    ],
+    [
+        ["orange","accent-1"],
+        ["orange","darken-1"],
+        ["blue","darken-2"],
+        ["light-blue","accent-4"],
+    ],
+    [
+        ["red","accent-4"],
+        ["indigo","darken-1"],
+        ["blue","darken-2"],
+        ["light-blue","accent-4"],
+    ],
+    [
+        ["grey","lighten-1"],
+        ["grey","darken-4"],
+        ["deep-orange","lighten-2"],
+        ["yellow","lighten-1"],
+    ],
+    [
+        ["blue-grey","darken-4"],
+        ["blue-grey","darken-1"],
+        ["orange","darken-1"],
+        ["yellow","lighten-1"],
+    ]
+
+  ]
