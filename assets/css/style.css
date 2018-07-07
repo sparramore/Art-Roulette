@@ -78,6 +78,16 @@
   background-size: cover;
 }
 
+#userGallery {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+}
+
+#userLoginModal {
+  z-index: 5;
+}
+
 @media only screen and (max-width: 678px) {
   .word-result {
     display: inline-block;
@@ -137,5 +147,6 @@
   
 }
 
-
-
+#filesubmit {
+  text-align: center;
+}

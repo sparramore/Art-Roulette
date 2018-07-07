@@ -9,6 +9,11 @@ var config = {
 };
 
 firebase.initializeApp(config);
+//storageService is a reference to firebase storage service (it allows us to use all of the methods firebase makes available for storing data and files)
+const storageService = firebase.storage();
+// storageRef is a reference to our actual instantiation of that service — it will lead us to your specific database and root file location where things get uploaded.
+const storageRef = storageService.ref();
+
 var database = firebase.database();
 var auth = firebase.auth();
 
@@ -16,27 +21,37 @@ var auth = firebase.auth();
 //get the Adjective, we use our nouns list in the database to generate a list of adjectives with Datamuse
 function getAdj() {
     database.ref().child("nouns").once("value", function (snapshot) {
-        //get a random noun from our database
-        var numNouns = snapshot.numChildren();
-        var randomNoun = Math.floor(Math.random() * numNouns);
-        var nounName = 'noun' + randomNoun;
-        var noun = snapshot.child(nounName).val().name;
+          //get a random noun from our database
+          var numNouns = snapshot.numChildren();
+          var randomNoun = Math.floor(Math.random() * numNouns);
+          var nounName = 'noun' + randomNoun;
 
-        //show more like this button
-        $('#more-like-adj').css('visibility', 'visible');
+          noun = snapshot.child(nounName).val().name;
+          $('#noun1').text(noun);
+          $('#more-like-adj').css('visibility', 'visible'); 
+          showRandomImage(noun, '#rand-image-noun1');
+          // console.log("There are " + snapshot.numChildren() + " nouns");
+          // console.log(randomNoun);
+          // console.log(snapshot.child(nounName).val().name);
+          //ajax query URL DataMuse API
+          var queryURL = "https://api.datamuse.com//words?rel_jjb=" + noun;
 
-        //ajax query URL DataMuse API
-        var queryURL = "https://api.datamuse.com//words?rel_jjb=" + noun;
+          $.ajax({
+              url: queryURL,
+              method: "GET"
+          }).then(function (response) {
 
-        $.ajax({
-            url: queryURL,
-            method: "GET"
-        }).then(function (response) {
-             //get a random word from the Datamuse array
-            var randomDataMuse = Math.floor(Math.random() * response.length);
-            var dataMuseWord = response[randomDataMuse].word;
-            showRandomImage(dataMuseWord, '#adj-pic');
-            $('#adjective').text(dataMuseWord);
+
+              console.log(response);
+
+          noun = snapshot.child(nounName).val().name;
+          $('#noun2').text(noun);
+          showRandomImage(noun, '#rand-image-noun2');
+          //get a random word from the Datamuse array
+          var randomDataMuse = Math.floor(Math.random() * response.length);
+          var dataMuseWord = response[randomDataMuse].word;
+          showRandomImage(dataMuseWord, '#adj-pic');
+          $('#adjective').text(dataMuseWord);
         });
     })
 }
@@ -79,6 +94,7 @@ function getNoun2() {
 
         //show more like this button
         $('#more-like-noun2').css('visibility', 'visible');
+
 
         //ajax query URL Datamuse API
         var queryURL = "https://api.datamuse.com/words?rel_jja=" + adj2;
@@ -178,8 +194,40 @@ function LoginToServer() {
     });
 }
 
-$("#loginButton").on("click", function () {
-    LoginToServer();
+
+$("#loginButton").on("click",function()
+{
+    //LoginToServer();
+    var userEmail = $("#e-mail-Sub").val();
+    var userPass = $("#pass-Sub").val();
+    auth.signInWithEmailAndPassword(userEmail, userPass);
+    console.log("Signed In!");
+});
+
+// Authentication status listener - Jonathan
+firebase.auth().onAuthStateChanged(firebaseUser => {
+  if(firebaseUser) {
+    console.log(firebaseUser);
+    console.log("User logged in!");
+    $("#userProfileNavbar").removeClass("hide");
+    $("#userLogOutButton").removeClass("hide");
+    
+  }
+  else {
+    console.log("User not logged in!");
+    $("#userProfileNavbar").addClass("hide");
+    $("#userLogOutButton").addClass("hide");
+  }
+});
+
+//Logout button event listener - Jonathan
+$("#userLogOutButton").on("click", function() {
+  firebase.auth().signOut().then(function() {
+    console.log("User signed out!");
+    // Sign-out successful.
+  }).catch(function(error) {
+    // An error happened.
+  });
 });
 
 $(window).on('load', function () {
@@ -210,8 +258,10 @@ $("#user-Error-Modal-Submit").on("click", function () {
     $("#userLoginModal").show();
 });
 
-//our modal dialog's submit button clicked
-$("#user-Login-Modal-Submit").on("click", function () {
+
+//our modal dialog's submit button clicked - user-Login-Modal-Submit
+$("#userSignUpButton").on("click",function() {
+
 
 
     //get the users email and password.
@@ -257,45 +307,74 @@ function showRandomImage(searchWord, divID) {
         dataType: 'jsonp'
     }).then(function (response) {
         var results = response.items;
-        //for (var i = 0; i < 1; i++) { *DO ONLY ONCE FOR TESTING PURPOSES
-            var randomImage = $("<img>");
-            var sourceArr = results[1].pagemap.cse_image;
-            var sourceUrl = sourceArr[0].src;
-            randomImage.attr("src", sourceUrl);
-            randomImage.attr('width', 200).attr('height', 200).css('border', 'solid 1px black');
-            $(divID).append(randomImage)
-            $(divID).append("<br>");
-        //}
+        var imageDiv = $("<div>");
+        var randomImage = $("<img>");
+        var sourceArr = results[1].pagemap.cse_image;
+        var sourceUrl = sourceArr[0].src;
+        randomImage.attr("src", sourceUrl);
+        randomImage.attr('width', 200).attr('height', 200).css('border', 'solid 1px black');
+        $(divID).append(randomImage)
+        $(divID).append("<br>");
     });
 }
 
 // Materialize JavaScript components
 
-$(document).ready(function () {
-    // Materialize elements initialization
-    $(".fixed-action-btn").floatingActionButton({
-        direction: "right"
-    });
-    $('.collapsible').collapsible();
-    $('.modal').modal();
-    $('.trigger-modal').modal();
-    $('.tooltipped').tooltip();
 
-    // Listener for "word generator" button.
-    $("#navbarButton").on("click", function () {
-        getAdj();
-        getNoun1();
-        getNoun2();
-        $('.inspirations-improved').css('visibility', 'hidden');
-    });
+$(document).ready(function() {
+  // Materialize elements initialization
+  $(".fixed-action-btn").floatingActionButton({
+    direction: "right"
+  });
+  $('.collapsible').collapsible();
+  $('.modal').modal();
+  $('.trigger-modal').modal();
+  $('.tooltipped').tooltip();
+  $('.tabs').tabs();
+  $('textarea#userInterests').characterCounter();
 
-    // Listener for checkbox on "Settings" modal, shows/hides the user profile bar.
-    $("input:checkbox").change(function () {
-        if ($(this).is(":checked")) {
-            $("#userProfileNavbar").removeClass("hide");
-        }
-        else {
-            $("#userProfileNavbar").addClass("hide");
-        }
-    });
+  // Listener for "word generator" button.
+  $("#wordButton").on("click", function() {
+    getAdj();
+    getNoun1();
+    getNoun2();
+  });
+
+  // Listener for checkbox on "Settings" modal, shows/hides the user profile bar.
+  $("input:checkbox").change(function() {
+    if($("#userProfileShowToggle").is(":checked")) {
+      $("#userProfileNavbar").removeClass("hide");
+    }
+    else {
+      $("#userProfileNavbar").addClass("hide");
+    }
+  });
 });
+
+// Upload functionatity
+document.querySelector('.file-select').addEventListener('change', handleFileUploadChange);
+document.querySelector('.file-submit').addEventListener('click', handleFileUploadSubmit);
+
+let selectedFile;
+// handleFileUploadChange function gets triggered any time someone selects a new file via the upload via the Choose File upload button
+function handleFileUploadChange(e) {
+    // selectedFile that will keep track of whatever file a user has input via the Choose File button
+  selectedFile = e.target.files[0];
+}
+
+function handleFileUploadSubmit(e) {
+    const uploadTask = storageRef.child(`images/${selectedFile.name}`).put(selectedFile); //create a child directory called images, and place the file inside this directory
+    uploadTask.on('state_changed', (snapshot) => {
+    // Observe state change events such as progress, pause, and resume
+    }, (error) => {
+      // Handle unsuccessful uploads
+      console.log(error);
+    }, () => {
+       // Do something once upload is complete
+       console.log('success');
+    });
+  }
+
+function showUploads () {
+    
+}
