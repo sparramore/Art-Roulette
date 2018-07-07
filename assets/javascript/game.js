@@ -4,7 +4,7 @@ var config = {
     authDomain: "art-roulette-2ffee.firebaseapp.com",
     databaseURL: "https://art-roulette-2ffee.firebaseio.com",
     projectId: "art-roulette-2ffee",
-    storageBucket: "",
+    storageBucket: "gs://art-roulette-2ffee.appspot.com",
     messagingSenderId: "1037636482050"
 };
 
