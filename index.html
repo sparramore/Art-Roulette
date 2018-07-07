@@ -138,7 +138,20 @@
     </div>
   </nav>
 
+    <!-- Images -->
+    <div class="row">
+        <div class="col" id="google-images"></div>
+    </div>
+    
+
+<div type="button" class="btn btn-primary" id="loginButton">submit</div>
+<!-- <script type="text/javascript" src="js/materialize.min.js"></script> -->
+</body>
+
+
+  <!-- Button to generate words -->
   <!-- Experimenting with the use of Tabs to separate different "screens" (Main/User Profile) -->
+
   <div class="row">
     <div class="col s12">
       <ul class="tabs ">
@@ -223,9 +236,11 @@
   </div>
   <!-- Random word displays. -->
   <div class="row">
-    <div class="col m4 word-result"><div class="card-panel grey"><h1 id='adjective' class="flow-text"></h1></div><div id="rand-image-adj"></div></div>
-    <div class="col m4 word-result"><div class="card-panel grey"><h1 id='noun1' class="flow-text"></h1></div><div id="rand-image-noun1"></div></div>
-    <div class="col m4 word-result"><div class="card-panel grey"><h1 id="noun2" class="flow-text"></h1></div><div id="rand-image-noun2"></div></div>
+
+    <div class="col m4 word-result"><div class="card-panel grey"><h1 id='adjective' class="inspirations"></h1><button class='more-like-this' id="more-like-adj">More Like This</button><h6 id='ii-adj' class='inspirations-improved'>Inspirations Improved!</h6><div id='adj-pic'></div></div></div>
+    <div class="col m4 word-result"><div class="card-panel grey"><h1 id='noun1' class="inspirations"></h1><button class='more-like-this' id="more-like-noun1">More Like This</button><h6 id='ii-noun1' class='inspirations-improved'>Inspirations Improved!</h6><div id='noun1-pic'></div></div></div>
+    <div class="col m4 word-result"><div class="card-panel grey"><h1 id='noun2' class="inspirations"></h1><button class='more-like-this' id="more-like-noun2">More Like This</button><h6 id='ii-noun2' class='inspirations-improved'>Inspirations Improved!</h6><div id='noun2-pic'></div></div></div>
+
   </div>
   <!-- Roulette display. ToDo: Enhance to only appear while the search is happening and/or change the graphic.-->
   <div class="row">
