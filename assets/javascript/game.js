@@ -35,7 +35,7 @@ function getAdj() {
              //get a random word from the Datamuse array
             var randomDataMuse = Math.floor(Math.random() * response.length);
             var dataMuseWord = response[randomDataMuse].word;
-            showRandomImage(dataMuseWord, '#adjective');
+            showRandomImage(dataMuseWord, '#adj-pic');
             $('#adjective').text(dataMuseWord);
         });
     })
@@ -63,7 +63,7 @@ function getNoun1() {
             //get a random word from the Datamuse array
             var randomDataMuse = Math.floor(Math.random() * response.length);
             var dataMuseWord = response[randomDataMuse].word;
-            showRandomImage(dataMuseWord, '#noun1');
+            showRandomImage(dataMuseWord, '#noun1-pic');
             $('#noun1').text(dataMuseWord);
         });
     })
@@ -90,13 +90,13 @@ function getNoun2() {
             //get a random word from the Datamuse array
             var randomDataMuse = Math.floor(Math.random() * response.length);
             var dataMuseWord = response[randomDataMuse].word;
-            showRandomImage(dataMuseWord, "#noun2");
+            showRandomImage(dataMuseWord, "#noun2-pic");
             $('#noun2').text(dataMuseWord);
         });
     })
 }
 
-//click listenter for More Like This buttons
+//click listener for More Like This buttons
 $(document).on('click', '.more-like-this', function () {
     if (this.id == 'more-like-adj') {
 
@@ -249,26 +249,24 @@ $("#user-Login-Modal-Submit").on("click", function () {
 
 
 function showRandomImage(searchWord, divID) {
-    var queryURL = "https://www.googleapis.com/customsearch/v1?q=" + searchWord + "&cx=008015619189080859829%3Agapxkuki8im&key=AIzaSyC0OrvTZD_SB6qRfqRPu7L_F2ugZTzA8pE";
-    $(divID).html('');
+    var queryURL = "https://www.googleapis.com/customsearch/v1?q=" + searchWord + "&cx=008015619189080859829%3Agapxkuki8im&key=AIzaSyAeMljdzFgnEoUvlMjprLYTS5Efr0d-4Sw";
+    $(divID).empty();
     $.ajax({
         url: queryURL,
         method: "GET",
         dataType: 'jsonp'
     }).then(function (response) {
-        console.log('google api: ' + response);
         var results = response.items;
-        for (var i = 0; i < 1; i++) {
+        //for (var i = 0; i < 1; i++) { *DO ONLY ONCE FOR TESTING PURPOSES
             var randomImage = $("<img>");
-            var sourceArr = results[i].pagemap.cse_image;
+            var sourceArr = results[1].pagemap.cse_image;
             var sourceUrl = sourceArr[0].src;
             randomImage.attr("src", sourceUrl);
-            randomImage.attr('width', 200).attr('height', 200)
-            $(divID).parent("div").append(randomImage);
-        }
-        $(divID).parent("div").append("<br>");
+            randomImage.attr('width', 200).attr('height', 200).css('border', 'solid 1px black');
+            $(divID).append(randomImage)
+            $(divID).append("<br>");
+        //}
     });
-
 }
 
 // Materialize JavaScript components
