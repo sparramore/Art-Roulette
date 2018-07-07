@@ -8,7 +8,6 @@
   <link rel="stylsheet" type="text/css" href="assets/css/reset.css">
   <link rel="stylesheet" type="text/css" href="assets/css/style.css">
   <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-  <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous"> -->
   <!--Import Google Icon Font-->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <!--Import Materialize-->
@@ -53,17 +52,10 @@
       <div class="modal-body">
         <div class="row">
           <div class="col s12">
-            <!-- <p id="userNameTextPrompt">User Name</p>
-            <input id="e-mail-Sub" type="text" autocomplete="off">
-          </div> -->
           <div class="input-field col s12">
             <input id="e-mail-Sub" type="email" class="validate">
             <label for="e-mail-Sub">Email</label>
           </div>
-          <!-- <div class="col-lg-12">
-            <p id="userNameTextPrompt">Password</p>
-            <input id="pass-Sub" type="text" autocomplete="off">
-          </div> -->
           <div class="input-field col s12">
             <input id="pass-Sub" type="password" class="validate">
             <label for="pass-Sub">Password</label>
@@ -74,17 +66,10 @@
               <span class="input-group-text" >Log in Automatically?</span>
             </label>
           </p>
-          <!-- <div class="input-group">
-            <div class="input-group-prepend">
-            <input type="checkbox" aria-label="Checkbox for following text input">  
-            </div>
-            <span class="input-group-text" id="automaticLogin">Log in Automatically?</span>
-          </div> -->
         </div>
       </div>
       <div class="modal-footer">
-        <!-- <button type="button" class="btn btn-default modal-close" id="user-Login-Modal-Submit" data-dismiss="modal">Submit</button> -->
-        <button id="loginButton" class="btn waves-effect waves-light modal-close" type="button" name="action">Submit
+        <button id="loginButton" class="btn waves-effect waves-light modal-close" type="submit" name="action">Submit
           <i class="material-icons right">send</i>
         </button>
         <!-- Sign up button - Testing authentication at Firebase. -->
@@ -107,20 +92,20 @@
           <form class="col s12">
             <div class="row">
               <div class="input-field col s12">
-                <input id="userProfileNameEntry" type="text" class="validate">
-                <label for="userProfileNameEntry">Name</label>
+                <input id="userProfileNameEntry" type="text" class="validate" required="" aria-required="true">
+                <label for="userProfileNameEntry" data-error="Cannot be empty!" data-success="Success">Name</label>
               </div>
             </div>
             <div class="row">
               <div class="input-field col s12">
-                <input id="userProfileLocationEntry" type="text">
-                <label for="userProfileLocationEntry">Location</label>
+                <input id="userProfileLocationEntry" type="text" class="validate" required="" aria-required="true">
+                <label for="userProfileLocationEntry" data-error="Cannot be empty!" data-success="Success">Location</label>
               </div>
             </div>
             <div class="row">
               <div class="input-field col s12">
-                <textarea id="userInfoBioEntry" class="materialize-textarea" data-length="120"></textarea>
-                <label for="userInfoBioEntry">Bio</label>
+                <textarea id="userInfoBioEntry" class="materialize-textarea validate" required="" aria-required="true" data-length="120"></textarea>
+                <label for="userInfoBioEntry" data-error="Cannot be empty!" data-success="Success">Bio</label>
               </div>
             </div>
           </form>
@@ -134,7 +119,7 @@
   <!-- Settings modal. -->
   <div id="settingsModal" class="modal">
     <div class="modal-content">
-      <h4>Possible "Settings" Modal</h4>
+      <h4>User Settings</h4>
       <p>Show user profile bar.</p>
       <div class="switch">
         <label>
@@ -143,6 +128,10 @@
           <span class="lever"></span>
           On
         </label>
+      </div>
+      <br><br>
+      <div class="col s12">
+        <a id="userProfileModalCallButton" class="waves-effect waves-light btn modal-trigger" href="#userProfileModal">My Profile</a>
       </div>
     </div>
     <div class="modal-footer">
@@ -156,7 +145,7 @@
       <div class="row">
         <div class="col s4 center-align">
           <!-- User name under profile picture. -->
-          <div id="userName" class="blue-grey-text text-darken-2">User Name</div>
+          <div id="secondNavbarUserName" class="blue-grey-text text-darken-3">Hi, I'm: </div>
         </div>
         <div class="col s4 center-align">
           <!-- User's Profile picture. -->
@@ -164,7 +153,7 @@
         </div>
         <div class="col s4 center-align">
           <!-- User name under profile picture. -->
-          <div id="userName" class="blue-grey-text text-darken-2">User Name</div>
+          <div id="secondNavbarUserLocation" class="blue-grey-text text-darken-3">From: </div>
         </div>
       </div>
     </div>
@@ -174,19 +163,13 @@
     <div class="row">
         <div class="col" id="google-images"></div>
     </div>
-    
-
-<div type="button" class="btn btn-primary" id="loginButton">submit</div>
-<!-- <script type="text/javascript" src="js/materialize.min.js"></script> -->
-</body>
-
 
   <!-- Button to generate words -->
   <!-- Experimenting with the use of Tabs to separate different "screens" (Main/User Profile) -->
 
   <div class="row">
     <div class="col s12">
-      <ul class="tabs ">
+      <ul class="tabs">
         <li class="tab col s6"><a class="active" href="#rouletteTab">Art Roulette</a></li>
         <li class="tab col s6"><a href="#userProfileTab">User Profile</a></li>
       </ul>
@@ -195,6 +178,7 @@
     <div id="rouletteTab" class="col s12">
       <!-- Button to generate words -->
       <div class="row">
+        <br>
         <div class="col s12 center-align">
           <a id="wordButton" class="waves-effect waves-light btn-large">INSPIRE ME!</a>
         </div>
@@ -213,11 +197,11 @@
     <!-- User profile, should only have content accessible to logged in users. Maybe should have the "disabled" class until user logs in. -->
     <div id="userProfileTab" class="col s12">
       <!-- Options for the user to enter the relevant data to their profile. -->
-      <div class="row">
+      <!-- <div class="row">
         <div class="col s12 center-align">
           <a id="userProfileModalCallButton" class="waves-effect waves-light btn modal-trigger" href="#userProfileModal">My Profile</a>
         </div>
-      </div>
+      </div> -->
       <div class="row">
         <!-- User information section. -->
         <div class="col s12 m6">
@@ -226,7 +210,7 @@
               <ul class="userInfo white-text">
                 <li id="userInfoNameText">Name: </li>
                 <li id="userInfoLocationText">Location: </li>
-                <li id="userInfoIBioText">Bio: </li>
+                <li id="userInfoBioText">Bio: </li>
               </ul>
           </div>
         </div>
