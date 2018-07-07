@@ -16,8 +16,6 @@ const storageRef = storageService.ref();
 
 var database = firebase.database();
 var auth = firebase.auth();
-var adj = '';
-var noun = '';
 //To store user information after login.
 var user;
 var dbUserProfile;
@@ -28,17 +26,15 @@ var userProfileLocationRetrieved;
 
 //get the Adjective, we use our nouns list in the database to generate a list of adjectives with Datamuse
 function getAdj() {
-    database.ref().child("nouns").on("value", function (snapshot) {
+    database.ref().child("nouns").once("value", function (snapshot) {
         //get a random noun from our database
         var numNouns = snapshot.numChildren();
         var randomNoun = Math.floor(Math.random() * numNouns);
         var nounName = 'noun' + randomNoun;
-        noun = snapshot.child(nounName).val().name;
-        $('#noun1').text(noun);
-        showRandomImage(noun, '#rand-image-noun1');
-        // console.log("There are " + snapshot.numChildren() + " nouns");
-        // console.log(randomNoun);
-        // console.log(snapshot.child(nounName).val().name);
+        var noun = snapshot.child(nounName).val().name;
+
+        //show more like this button
+        $('#more-like-adj').css('visibility', 'visible');
 
         //ajax query URL DataMuse API
         var queryURL = "https://api.datamuse.com//words?rel_jjb=" + noun;
@@ -47,18 +43,10 @@ function getAdj() {
             url: queryURL,
             method: "GET"
         }).then(function (response) {
-
-            console.log(response);
-
-        noun = snapshot.child(nounName).val().name;
-        $('#noun2').text(noun);
-        showRandomImage(noun, '#rand-image-noun2');
             //get a random word from the Datamuse array
             var randomDataMuse = Math.floor(Math.random() * response.length);
-
-            //console.log('randomDataMuse:' + randomDataMuse);
-
             var dataMuseWord = response[randomDataMuse].word;
+            showRandomImage(dataMuseWord, '#adj-pic');
             $('#adjective').text(dataMuseWord);
         });
     })
@@ -66,33 +54,27 @@ function getAdj() {
 
 //get the Noun, we use our adjective list in the database to generate a list of nouns with Datamuse
 function getNoun1() {
-    database.ref().child("adjectives").on("value", function (snapshot) {
+    database.ref().child("adjectives").once("value", function (snapshot) {
         //get a random adjective from our database
         var numAdj = snapshot.numChildren();
         var randomAdj = Math.floor(Math.random() * numAdj);
         var adjName = 'adj' + randomAdj;
-        adj = snapshot.child(adjName).val().name;
-        console.log(adj);
+        var adj1 = snapshot.child(adjName).val().name;
 
-        // console.log("There are " + snapshot.numChildren() + " adjectives");
-        // console.log(randomAdj);
-        // console.log(snapshot.child(adjName).val().name);
+        //show more like this button
+        $('#more-like-noun1').css('visibility', 'visible');
 
         //ajax query URL Datamuse API
-        var queryURL = "https://api.datamuse.com/words?rel_jja=" + adj;
+        var queryURL = "https://api.datamuse.com/words?rel_jja=" + adj1;
 
         $.ajax({
             url: queryURL,
             method: "GET"
         }).then(function (response) {
-
-            console.log(response);
-
             //get a random word from the Datamuse array
             var randomDataMuse = Math.floor(Math.random() * response.length);
-
-            //console.log('randomDataMuse:' + randomDataMuse);
             var dataMuseWord = response[randomDataMuse].word;
+            showRandomImage(dataMuseWord, '#noun1-pic');
             $('#noun1').text(dataMuseWord);
         });
     })
@@ -100,51 +82,81 @@ function getNoun1() {
 
 //get Noun #2 (same as above)
 function getNoun2() {
-    database.ref().child("adjectives").on("value", function (snapshot) {
+    database.ref().child("adjectives").once("value", function (snapshot) {
         var numAdj = snapshot.numChildren();
         var randomAdj = Math.floor(Math.random() * numAdj);
         var adjName = 'adj' + randomAdj;
+        var adj2 = snapshot.child(adjName).val().name;
 
-        // console.log("There are " + snapshot.numChildren() + " adjectives");
-        // console.log(randomAdj);
-        // console.log(snapshot.child(adjName).val().name);
+        //show more like this button
+        $('#more-like-noun2').css('visibility', 'visible');
 
-        adj = snapshot.child(adjName).val().name;
-        $('#adjective').text(adj);
-        showRandomImage(adj, "#rand-image-adj");
+
+        //ajax query URL Datamuse API
+        var queryURL = "https://api.datamuse.com/words?rel_jja=" + adj2;
+
+        $.ajax({
+            url: queryURL,
+            method: "GET"
+        }).then(function (response) {
+            //get a random word from the Datamuse array
+            var randomDataMuse = Math.floor(Math.random() * response.length);
+            var dataMuseWord = response[randomDataMuse].word;
+            showRandomImage(dataMuseWord, "#noun2-pic");
+            $('#noun2').text(dataMuseWord);
+        });
     })
-    // $('#adjective').text(adj);
+}
 
-    var queryURL = "https://api.datamuse.com/words?rel_jja=" + adj;
+//click listener for More Like This buttons
+$(document).on('click', '.more-like-this', function () {
+    if (this.id == 'more-like-adj') {
 
-    $.ajax({
-        url: queryURL,
-        method: "GET"
-    }).then(function (response) {
-        console.log(response);
+        //hide button, show "Inspirations Improved!"
+        $('#more-like-adj').css('visibility', 'hidden');
+        $('#ii-adj').css('visibility', 'visible');
 
-        var randomDataMuse = Math.floor(Math.random() * response.length);
-        var dataMuseWord = response[randomDataMuse].word;
-        $('#noun2').text(dataMuseWord);
-      });
+    //}
+
+            //add the adjective to our database
+            database.ref().child("adjectives").once("value", function (snapshot) {
+              var numAdjs = snapshot.numChildren();
+              database.ref().child('adjectives').child('adj' + numAdjs).update({ name: $('#adjective').text() });
+          })
+      }
+      else if (this.id == 'more-like-noun1') {
+  
+          //hide button, show "Inspirations Improved!"
+          $('#more-like-noun1').css('visibility', 'hidden');
+          $('#ii-noun1').css('visibility', 'visible');
+  
+          //add noun1 to our database
+          database.ref().child("nouns").once("value", function (snapshot) {
+              var numNoun = snapshot.numChildren();
+              database.ref().child('nouns').child('noun' + numNoun).update({ name: $('#noun1').text() });
+          })
+      }
+      else if (this.id == 'more-like-noun2') {
+  
+          //hide button, show "Inspirations Improved!"
+          $('#more-like-noun2').css('visibility', 'hidden');
+          $('#ii-noun2').css('visibility', 'visible');
+  
+          //add noun2 to our database
+          database.ref().child("nouns").once("value", function (snapshot) {
+              var numNoun = snapshot.numChildren();
+              database.ref().child('nouns').child('noun' + numNoun).update({ name: $('#noun2').text() });
+          })
+      }
+    // //console.log our nouns and adjectives database lists for error checking
+    // database.ref().on("value", function (snapshot) {
       
-    }
-    
-    
-    // getAdj();
-    // getNoun1();
-    // getNoun2();
-    
-    
-    //console.log our nouns and adjectives database lists for error checking
-    database.ref().on("value", function (snapshot) {
+    //   console.log(snapshot.val().nouns);
+    //   console.log(snapshot.val().adjectives);
       
-      console.log(snapshot.val().nouns);
-      console.log(snapshot.val().adjectives);
-      
-    }, function (errorObject) {
-      // Create Error Handling
-      console.log("The read failed: " + errorObject.code);
+    // }, function (errorObject) {
+    //   // Create Error Handling
+    //   console.log("The read failed: " + errorObject.code);
     });
     
 // Start of Authentication logic organization/changes. At this point authentication persists throughout sessions as long as the user does not explicitly log out.
@@ -192,33 +204,20 @@ $(window).on('load', function()
   }
 });
 
-// What is this call's function? Doesn't seem linked to anything in particular.
-// auth.signOut().then(function() {
-//   // Sign-out successful.
-// }).catch(function(error) {
-//   // An error happened.
-//   var errorCode = error.code;
-//   var errorMessage = error.message;
-//   console.log(error);
-//   console.log(error.message);
-// });
-
-// Sign Up button function.
-function submitEmailForAuth(userEmail,userPass,saveLoginChecked)
-{
-    auth.createUserWithEmailAndPassword(userEmail, userPass).catch(function(error) {
+function submitEmailForAuth(userEmail, userPass, saveLoginChecked) {
+    auth.createUserWithEmailAndPassword(userEmail, userPass).catch(function (error) {
         // Handle Errors here.
         var errorCode = error.code;
         var errorMessage = error.message;
         console.log(error);
         console.log(error.message);
         // ...
-      });
+    });
 
-      window.localStorage.setItem("art-Roulette-Email",userEmail);
-      window.localStorage.setItem("art-Roulette-Pass",userPass);
-      window.localStorage.setItem("art-Roulette-SaveLogin",saveLoginChecked);
-      window.localStorage.setItem("art-Roulette-Submitted-Email",true)
+    window.localStorage.setItem("art-Roulette-Email", userEmail);
+    window.localStorage.setItem("art-Roulette-Pass", userPass);
+    window.localStorage.setItem("art-Roulette-SaveLogin", saveLoginChecked);
+    window.localStorage.setItem("art-Roulette-Submitted-Email", true)
 
       if(saveLoginChecked)
       {
@@ -238,7 +237,7 @@ function LoginToServer()
         var errorCode = error.code;
         var errorMessage = error.message;
         // ...
-      });
+    });
 }
 // Commenting out the error modal in the meantime.
 // $("#user-Error-Modal-Submit").on("click",function()
@@ -246,6 +245,7 @@ function LoginToServer()
 //   $("#userLoginErrorModal").hide();
 //   $("#userLoginModal").show();
 // });
+
 
 //our modal dialog's submit button clicked - user-Login-Modal-Submit
 $("#userSignUpButton").on("click",function() {
@@ -304,30 +304,30 @@ $("#userLogOutButton").on("click", function() {
 
 // End of Authentication Logic changes/organization.
 
-function showRandomImage (searchWord, divID) {
-  var queryURL = "https://www.googleapis.com/customsearch/v1?q=" + searchWord + "&cx=008015619189080859829%3Agapxkuki8im&key=AIzaSyC0OrvTZD_SB6qRfqRPu7L_F2ugZTzA8pE";
-  
+
+function showRandomImage(searchWord, divID) {
+    var queryURL = "https://www.googleapis.com/customsearch/v1?q=" + searchWord + "&cx=008015619189080859829%3Agapxkuki8im&key=AIzaSyAeMljdzFgnEoUvlMjprLYTS5Efr0d-4Sw";
+    $(divID).empty();
     $.ajax({
         url: queryURL,
         method: "GET",
         dataType: 'jsonp'
-    }).then(function(response) {
-        console.log(response);
+    }).then(function (response) {
         var results = response.items;
-        var imageDiv = $("<div>");
-        for (var i = 0; i < 3; i++) {
+        //for (var i = 0; i < 1; i++) { *DO ONLY ONCE FOR TESTING PURPOSES
             var randomImage = $("<img>");
-            var sourceArr = results[i].pagemap.cse_image;
+            var sourceArr = results[0].pagemap.cse_image;
             var sourceUrl = sourceArr[0].src;
             randomImage.attr("src", sourceUrl);
-            randomImage.attr('width', 200).attr('height', 200);
-            $(imageDiv).append(randomImage);
-        }
-        $(divID).html(imageDiv); 
+            randomImage.attr('width', 200).attr('height', 200).css('border', 'solid 1px black');
+            $(divID).append(randomImage)
+            $(divID).append("<br>");
+        //}
     });
 }
 
 // Materialize JavaScript components
+
 
 $(document).ready(function() {
   // Materialize elements initialization
@@ -346,6 +346,7 @@ $(document).ready(function() {
     getAdj();
     getNoun1();
     getNoun2();
+    $('.inspirations-improved').css('visibility', 'hidden');
   });
 
   // Listener for checkbox on "Settings" modal, shows/hides the user profile bar.

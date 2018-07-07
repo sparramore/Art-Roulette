@@ -2,7 +2,7 @@
 
 /* adding a little styling for the modal dialogs - we can change the accenting colors whenever */
 
-.modal-header
+/* .modal-header
 {
     background: darkblue;
     color: white;
@@ -18,7 +18,7 @@
 .modal-footer
 {
     background: darkblue;
-}
+} */
 
 #userNameTextPrompt
 {
@@ -111,6 +111,42 @@
     transition: 1s; 
   }
 }
+
+.more-like-this {
+  visibility: hidden;
+  -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    background: rgba(255, 255, 255, 0.75);
+    color: black;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 5px;
+    font-weight: 500;
+}
+
+.more-like-this:hover {
+  background-color: black;
+    color: white;
+}
+
+.inspirations-improved {
+  visibility: hidden;
+}
+
+@font-face {
+  font-family: Roulette;
+  src: url(RouletteCapsOpti.otf);
+  }
+
+.inspirations {
+  text-transform: capitalize;
+  font-family: Roulette, Arial, Helvetica, sans-serif;
+  font-size: 48px;
+  border: 1px black solid;
+  background: rgba(255, 255, 255, 0.75);
+  
+}
+
 #filesubmit {
   text-align: center;
 }
