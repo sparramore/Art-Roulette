@@ -231,6 +231,9 @@ $(window).on('load', function () {
         $("#user-Login-Modal-Submit").hide();
         LoginToServer();
     }
+
+    $('body').removeClass('fade-out');
+
 });
 
 auth.signOut().then(function () {
@@ -341,6 +344,8 @@ $(document).ready(function() {
       $("#userProfileNavbar").addClass("hide");
     }
   });
+
+  selectRandomColorSchemeAndApply();
 });
 
 // Upload functionatity
@@ -370,3 +375,79 @@ function handleFileUploadSubmit(e) {
 function showUploads () {
     
 }
+
+function selectRandomColorSchemeAndApply()
+{
+    console.log("selectRandom");
+    var randoScheme = Math.floor(Math.random() * ColorSchemeArray.length); 
+    $("#headerColor").addClass(ColorSchemeArray[randoScheme][0][0]);
+    $("#headerColor").addClass(ColorSchemeArray[randoScheme][0][1]);
+
+    //console.log();
+    $(".card-panel").each(function() {
+        $(this).addClass(ColorSchemeArray[randoScheme][1][0]);
+        $(this).addClass(ColorSchemeArray[randoScheme][1][1]);
+    });
+
+    $(".collapsible-header").each(function() {
+        $(this).addClass(ColorSchemeArray[randoScheme][2][0]);
+        $(this).addClass(ColorSchemeArray[randoScheme][2][1]);
+    });
+
+    console.log(ColorSchemeArray[randoScheme][2][0]);
+    console.log(ColorSchemeArray[randoScheme][2][1]);
+
+    $(".collapsible-body").each(function() {
+        $(this).addClass(ColorSchemeArray[randoScheme][3][0]);
+        $(this).addClass(ColorSchemeArray[randoScheme][3][1]);
+    });
+    
+
+}
+
+//section for the random color generation
+var currentBackgroundIndex;
+var ColorSchemeArray;
+
+ColorSchemeArray = [
+    [
+        ["teal","darken-4"],
+        ["teal","darken-3"],
+        ["teal","darken-1"],
+        ["teal","lighten-3"],
+    ],
+    [
+        ["cyan","darken-4"],
+        ["green","lighten-1"],
+        ["blue","darken-4"],
+        ["blue","accent-1"],
+    ],
+    [
+        ["orange","accent-1"],
+        ["orange","darken-1"],
+        ["blue","darken-2"],
+        ["light-blue","accent-4"],
+    ],
+    [
+        ["red","accent-4"],
+        ["indigo","darken-1"],
+        ["blue","darken-2"],
+        ["light-blue","accent-4"],
+    ],
+    [
+        ["grey","lighten-1"],
+        ["grey","darken-4"],
+        ["deep-orange","lighten-2"],
+        ["yellow","lighten-1"],
+    ],
+    [
+        ["blue-grey","darken-4"],
+        ["blue-grey","darken-1"],
+        ["orange","darken-1"],
+        ["yellow","lighten-1"],
+    ],
+
+]
+
+
+selectRandomColorSchemeAndApply();
