@@ -20,6 +20,11 @@ var adj = '';
 var noun = '';
 //To store user information after login.
 var user;
+var dbUserProfile;
+var userProfileName;
+var userProfileNameRetrieved;
+var userProfileLocation;
+var userProfileLocationRetrieved;
 
 //get the Adjective, we use our nouns list in the database to generate a list of adjectives with Datamuse
 function getAdj() {
@@ -150,7 +155,18 @@ firebase.auth().onAuthStateChanged(firebaseUser => {
     console.log("User: " + firebaseUser.email + " logged in!");
     $("#userProfileNavbar").removeClass("hide");
     $("#userLogOutButton").removeClass("hide");
+    //Retrieving the user's data at login. The profile will get populated from the Firebase "users" location.
     user = firebase.auth().currentUser;
+    dbUserProfile = database.ref("/users/" + user.uid);
+    dbUserProfile.once("value", function(data) {
+      console.log(data.val().name);
+      console.log(data.val().location);
+      userProfileNameRetrieved = data.val().name;
+      userProfileLocationRetrieved = data.val().location;
+      $("#userInfoNameText").html("<b>Name: </b>" + data.val().name),
+      $("#userInfoLocationText").html("<b>Location: </b>" + data.val().location),
+      $("#userInfoBioText").html("<b>Bio: </b>" + data.val().bio)
+    })
   }
   else {
     console.log("No users logged in!");
@@ -323,7 +339,7 @@ $(document).ready(function() {
   $('.trigger-modal').modal();
   $('.tooltipped').tooltip();
   $('.tabs').tabs();
-  $('textarea#userInterests').characterCounter();
+  $('textarea#userInfoBioEntry').characterCounter();
 
   // Listener for "word generator" button.
   $("#wordButton").on("click", function() {
@@ -343,6 +359,18 @@ $(document).ready(function() {
   });
 
   // Listener for the user profile button, summons the corresponding modal and displays the information entered.
+  $("#userProfileInfoFillButton").on("click", function() {
+    userProfileName = $("#userProfileNameEntry").val().trim();
+    userProfileLocation = $("#userProfileLocationEntry").val().trim();
+    if(userProfileName != "" && userProfileLocationRetrieved) {
+      dbUserProfile.update({
+        name: userProfileName,
+        location: userProfileLocation
+      });
+    } 
+    $("#userInfoNameText").html("<b>Name: </b>" + userProfileName);
+    $("#userInfoLocationText").html("<b>Location: </b>" + userProfileLocation);
+  });
 });
 
 // Upload functionatity

@@ -119,15 +119,15 @@
             </div>
             <div class="row">
               <div class="input-field col s12">
-                <textarea id="userInfoInterestsEntry" class="materialize-textarea"></textarea>
-                <label for="userInfoInterestsEntry">Interests</label>
+                <textarea id="userInfoBioEntry" class="materialize-textarea" data-length="120"></textarea>
+                <label for="userInfoBioEntry">Bio</label>
               </div>
             </div>
           </form>
         </div>
       </div>
       <div class="modal-footer">
-        <a href="#!" class="modal-close waves-effect waves-green btn-flat">DONE</a>
+        <a id="userProfileInfoFillButton" href="#!" class="modal-close waves-effect waves-green btn-flat">DONE</a>
       </div>
     </div>
 
@@ -202,7 +202,7 @@
       <!-- Options for the user to enter the relevant data to their profile. -->
       <div class="row">
         <div class="col s12 center-align">
-          <a id="userInfoFillButton" class="waves-effect waves-light btn-large modal-trigger" href="#userProfileModal">My Profile</a>
+          <a id="userProfileModalCallButton" class="waves-effect waves-light btn modal-trigger" href="#userProfileModal">My Profile</a>
         </div>
       </div>
       <div class="row">
@@ -213,7 +213,7 @@
               <ul class="userInfo white-text">
                 <li id="userInfoNameText">Name: </li>
                 <li id="userInfoLocationText">Location: </li>
-                <li id="userInfoInterestsText">Interests: </li>
+                <li id="userInfoIBioText">Bio: </li>
               </ul>
           </div>
         </div>
