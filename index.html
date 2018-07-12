@@ -20,9 +20,88 @@
   
 </head>
 <body>
+<script>
+document.body.className += 'fade-out';
 
+function selectRandomColorSchemeAndApply()
+{
+    console.log("selectRandom");
+    var randoScheme = Math.floor(Math.random() * ColorSchemeArray.length); 
+    $("#headerColor").addClass(ColorSchemeArray[randoScheme][0][0]);
+    $("#headerColor").addClass(ColorSchemeArray[randoScheme][0][1]);
+
+    //console.log();
+    $(".card-panel").each(function() {
+        $(this).addClass(ColorSchemeArray[randoScheme][1][0]);
+        $(this).addClass(ColorSchemeArray[randoScheme][1][1]);
+    });
+
+    $(".collapsible-header").each(function() {
+        $(this).addClass(ColorSchemeArray[randoScheme][2][0]);
+        $(this).addClass(ColorSchemeArray[randoScheme][2][1]);
+    });
+
+    console.log(ColorSchemeArray[randoScheme][2][0]);
+    console.log(ColorSchemeArray[randoScheme][2][1]);
+
+    $(".collapsible-body").each(function() {
+        $(this).addClass(ColorSchemeArray[randoScheme][3][0]);
+        $(this).addClass(ColorSchemeArray[randoScheme][3][1]);
+    });
+    
+
+}
+
+//section for the random color generation
+var currentBackgroundIndex;
+var ColorSchemeArray;
+
+ColorSchemeArray = [
+    [
+        ["teal","darken-4"],
+        ["teal","darken-3"],
+        ["teal","darken-1"],
+        ["teal","lighten-3"],
+    ],
+    [
+        ["cyan","darken-4"],
+        ["green","lighten-1"],
+        ["blue","darken-4"],
+        ["blue","accent-1"],
+    ],
+    [
+        ["orange","accent-1"],
+        ["orange","darken-1"],
+        ["blue","darken-2"],
+        ["light-blue","accent-4"],
+    ],
+    [
+        ["red","accent-4"],
+        ["indigo","darken-1"],
+        ["blue","darken-2"],
+        ["light-blue","accent-4"],
+    ],
+    [
+        ["grey","lighten-1"],
+        ["grey","darken-4"],
+        ["deep-orange","lighten-2"],
+        ["yellow","lighten-1"],
+    ],
+    [
+        ["blue-grey","darken-4"],
+        ["blue-grey","darken-1"],
+        ["orange","darken-1"],
+        ["yellow","lighten-1"],
+    ],
+
+]
+
+
+selectRandomColorSchemeAndApply();
+  
+  </script>
   <div class="navbar-fixed">
-    <nav class="red darken-2">
+      <nav id="headerColor">
       <div class="container">
         <div class="nav-wrapper">
           <!-- FAB Code - Login and options menu. -->
@@ -138,7 +217,20 @@
     </div>
   </nav>
 
+    <!-- Images -->
+    <div class="row">
+        <div class="col" id="google-images"></div>
+    </div>
+    
+
+<div type="button" class="btn btn-primary" id="loginButton">submit</div>
+<!-- <script type="text/javascript" src="js/materialize.min.js"></script> -->
+</body>
+
+
+  <!-- Button to generate words -->
   <!-- Experimenting with the use of Tabs to separate different "screens" (Main/User Profile) -->
+
   <div class="row">
     <div class="col s12">
       <ul class="tabs ">
@@ -156,9 +248,9 @@
       </div>
       <!-- Random word displays. -->
       <div class="row">
-        <div class="col m4 word-result"><div class="card-panel grey"><h1 id='adjective' class="flow-text"></h1></div></div>
-        <div class="col m4 word-result"><div class="card-panel grey"><h1 id='noun1' class="flow-text"></h1></div></div>
-        <div class="col m4 word-result"><div class="card-panel grey"><h1 id="noun2" class="flow-text"></h1></div></div>
+          <div class="col m4 word-result"><div class="card-panel"><h1 id='adjective' class="inspirations"></h1><button class='more-like-this' id="more-like-adj">More Like This</button><h6 id='ii-adj' class='inspirations-improved'>Inspirations Improved!</h6><div id='adj-pic'></div></div></div>
+          <div class="col m4 word-result"><div class="card-panel"><h1 id='noun1' class="inspirations"></h1><button class='more-like-this' id="more-like-noun1">More Like This</button><h6 id='ii-noun1' class='inspirations-improved'>Inspirations Improved!</h6><div id='noun1-pic'></div></div></div>
+          <div class="col m4 word-result"><div class="card-panel"><h1 id='noun2' class="inspirations"></h1><button class='more-like-this' id="more-like-noun2">More Like This</button><h6 id='ii-noun2' class='inspirations-improved'>Inspirations Improved!</h6><div id='noun2-pic'></div></div></div>
       </div>
       <!-- Roulette display. ToDo: Enhance to only appear while the search is happening and/or change the graphic.-->
       <div class="row">
@@ -170,7 +262,7 @@
       <div class="row">
         <!-- User information section. -->
         <div class="col s12 m6">
-          <div class="card-panel teal">
+          <div class="card-panel">
             <h5 class="white-text">User Info</h5>
               <ul class="userInfo white-text">
                 <li>Name: </li>
@@ -180,7 +272,7 @@
           </div>
         </div>
         <div class="col s12 m6">
-          <div class="card-panel teal">
+          <div class="card-panel">
             <h5 class="white-text">Likes/Comments or something.</h5>
               <ul class="userSocial white-text">
                 <li>Likes: </li>
@@ -220,16 +312,6 @@
         <a class="carousel-item" href="#five!"><img src="./assets/images/birds.jpeg"></a>
       </div>
     </div>
-  </div>
-  <!-- Random word displays. -->
-  <div class="row">
-    <div class="col m4 word-result"><div class="card-panel grey"><h1 id='adjective' class="flow-text"></h1></div><div id="rand-image-adj"></div></div>
-    <div class="col m4 word-result"><div class="card-panel grey"><h1 id='noun1' class="flow-text"></h1></div><div id="rand-image-noun1"></div></div>
-    <div class="col m4 word-result"><div class="card-panel grey"><h1 id="noun2" class="flow-text"></h1></div><div id="rand-image-noun2"></div></div>
-  </div>
-  <!-- Roulette display. ToDo: Enhance to only appear while the search is happening and/or change the graphic.-->
-  <div class="row">
-    <div class="col s12 m4 offset-m4"><div id="bottomRouletteImage" class="card-panel grey" ></div></div>
   </div>
 
 
