@@ -16,7 +16,9 @@ const storageRef = storageService.ref();
 
 var database = firebase.database();
 var auth = firebase.auth();
+
 var uid;
+
 
 //get the Adjective, we use our nouns list in the database to generate a list of adjectives with Datamuse
 function getAdj() {
