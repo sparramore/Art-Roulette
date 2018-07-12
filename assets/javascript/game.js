@@ -16,7 +16,7 @@ const storageRef = storageService.ref();
 
 var database = firebase.database();
 var auth = firebase.auth();
-
+var uid;
 
 //get the Adjective, we use our nouns list in the database to generate a list of adjectives with Datamuse
 function getAdj() {
@@ -199,14 +199,17 @@ firebase.auth().onAuthStateChanged(firebaseUser => {
   if(firebaseUser) {
     console.log(firebaseUser);
     console.log("User logged in!");
+    uid = firebaseUser.uid;
     $("#userProfileNavbar").removeClass("hide");
     $("#userLogOutButton").removeClass("hide");
     
   }
   else {
     console.log("User not logged in!");
+    uid = "";
     $("#userProfileNavbar").addClass("hide");
     $("#userLogOutButton").addClass("hide");
+    
   }
 });
 
@@ -360,21 +363,50 @@ function handleFileUploadChange(e) {
 }
 
 function handleFileUploadSubmit(e) {
-    const uploadTask = storageRef.child(`images/${selectedFile.name}`).put(selectedFile); //create a child directory called images, and place the file inside this directory
+     
+    const uploadTask = storageRef.child(`/images/${selectedFile.name}`).put(selectedFile); //create a child directory called images, and place the file inside this directory
+    
+    var imagesource = `/images/${selectedFile.name}`;
     uploadTask.on('state_changed', (snapshot) => {
     // Observe state change events such as progress, pause, and resume
     }, (error) => {
-      // Handle unsuccessful uploads
-      console.log(error);
+    // Handle unsuccessful uploads
+        console.log(error);
     }, () => {
-       // Do something once upload is complete
-       console.log('success');
+    // Do something once upload is complete
+        uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+            console.log('File available at', downloadURL);
+            sourceImgUrl = downloadURL;
+          });
+        console.log('success');
     });
+
+    var storage = firebase.storage();
+    var pathReference = storage.ref('images/stars.jpg');
+    
+    storageRef.child('images/stars.jpg').getDownloadURL().then(function(url) {
+        // `url` is the download URL for 'images/stars.jpg'
+      
+        // This can be downloaded directly:
+        var xhr = new XMLHttpRequest();
+        xhr.responseType = 'blob';
+        xhr.onload = function(event) {
+          var blob = xhr.response;
+        };
+        xhr.open('GET', url);
+        xhr.send();
+      
+        // Or inserted into an <img> element:
+        var img = $(".carousel-item").eq(i);
+        img.src = url;
+        i++;
+      }).catch(function(error) {
+        // Handle any errors
+      });
+
+    
   }
 
-function showUploads () {
-    
-}
 
 function selectRandomColorSchemeAndApply()
 {
@@ -451,3 +483,4 @@ ColorSchemeArray = [
 
 
 selectRandomColorSchemeAndApply();
+
